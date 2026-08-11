@@ -76,6 +76,9 @@ h1 { margin:0; font-size:clamp(42px,7vw,82px); }
 .card-link::after { content:" →"; }
 
 .category-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.category-group + .category-group { margin-top:56px; }
+.category-group .section-head { margin-bottom:18px; }
+.category-group .section-head h2 { font-size:clamp(26px,3vw,38px); }
 .category-tile { min-height:155px; padding:20px; border-radius:18px; background:var(--ink); color:#fff; text-decoration:none; display:flex; flex-direction:column; justify-content:space-between; }
 .category-tile:nth-child(3n+2) { background:var(--green); }
 .category-tile:nth-child(3n) { background:#cfdf74; color:var(--ink); }

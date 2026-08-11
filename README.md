@@ -46,7 +46,7 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 - トップ・検索／絞り込み
 - 30サービスの個別HTML
-- 初心者、日本の銀行、無料サブドメイン、GitHub Pages、Blogspot、国内、低支払基準、Native、成長後などのカテゴリHTML
+- 初心者、日本の銀行、PayPal、Payoneer、Wise/Revolut、暗号資産、国際Wire、無料サブドメイン、広告形式などのカテゴリHTML
 - 選び方・調査方針
 - sitemap.xml / robots.txt / 404.html
 
@@ -64,3 +64,5 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 - `ad_network_schema_2026-08-11.tsv`: 公開スキーマ
 
 アフィリエイトURL、調査ソース、生成ロジックは公開Repositoryにそのまま含める方針です。AIエージェントも本READMEの構成・更新手順に従ってください。
+
+カテゴリは `scripts/build-site.mjs` の定義とTSVの値から生成します。該当サービスが1件以上あるカテゴリだけを公開し、0件のカテゴリは生成しません。たとえばStripe Publisher支払いは現在0件のため非公開ですが、将来 `stripe_payout=Yes` の行が追加されると自動的に生成されます。

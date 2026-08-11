@@ -20,17 +20,38 @@ function parseTsv(text) {
 }
 
 const categories = [
-  { slug:'beginner', title:'初心者向け', short:'0円から最初の収益を目指す', description:'ゼロから収益化を始めやすい、スコア4以上の広告サービス。', filter:r=>Number(r.zero_to_one_score_1_5)>=4 },
-  { slug:'japan-bank', title:'日本の銀行だけで完結', short:'外部ウォレットを経由しない', description:'日本の銀行口座への支払いを公式情報で確認できたサービス。', filter:r=>r.japan_bank_only_complete==='Yes' },
-  { slug:'no-minimum-traffic', title:'最低PVなし・非公開', short:'小規模サイトから検討', description:'公開された最低トラフィック条件がない、または固定閾値がないサービス。審査通過を保証するものではありません。', filter:r=>/なし|固定閾値なし/.test(r.minimum_traffic) },
-  { slug:'free-subdomain', title:'無料サブドメイン候補', short:'Blogspotや静的ホストを比較', description:'いずれかの無料URLで公式OK・条件付き・技術推定OKとなるサービス。', filter:r=>['blogspot_free_url','wordpress_com_free_url','github_pages_free_url','vercel_free_subdomain','cloudflare_pages_free_subdomain'].some(k=>['公式OK','条件付き','技術推定OK'].includes(r[k])) },
-  { slug:'github-pages', title:'GitHub Pages候補', short:'github.ioで試せる可能性', description:'GitHub Pages無料URLで技術的に設置可能、または条件付きで審査対象となる候補。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.github_pages_free_url) },
-  { slug:'blogspot', title:'Blogspot候補', short:'無料ブログから収益化', description:'Blogspot無料URLで公式OK、条件付き、または技術推定OKのサービス。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.blogspot_free_url) },
-  { slug:'domestic', title:'国内サービス', short:'日本語対応を重視', description:'日本企業が運営する国内向け広告ネットワーク・SSP。', filter:r=>r.home_region.includes('日本') },
-  { slug:'low-payout', title:'低い支払基準', short:'初回出金までを短く', description:'全体の最低支払額が円建て8,000円以下、または外貨100以下と読み取れるサービス。支払方法により条件が変わります。', filter:r=>/500円|3,000円|5,000円|8,000円|\$1\b|\$5\b|\$20\b|\$25\b|\$50\b|\$100\b|20 EUR/.test(r.minimum_payout_overall) },
-  { slug:'native-ads', title:'ネイティブ広告', short:'コンテンツになじむ形式', description:'Native、In-text、レコメンド型広告を扱うサービス。', filter:r=>/Native|ネイティブ|In-text|レコメンド/i.test(`${r.platform_type} ${r.ad_formats}`) },
-  { slug:'growth', title:'成長後の乗り換え先', short:'1万PV以上・運用型', description:'一定の規模や収益実績を求めるManaged Programmatic・成長メディア向けサービス。', filter:r=>/Growth|Enterprise/.test(r.beginner_tier) }
-];
+  { group:'初心者・サイト条件', slug:'beginner', title:'初心者向け', short:'0円から最初の収益を目指す', description:'ゼロから収益化を始めやすい、スコア4以上の広告サービス。', filter:r=>Number(r.zero_to_one_score_1_5)>=4 },
+  { group:'初心者・サイト条件', slug:'no-minimum-traffic', title:'最低PVなし・非公開', short:'小規模サイトから検討', description:'公開された最低トラフィック条件がない、または固定閾値がないサービス。審査通過を保証するものではありません。', filter:r=>/なし|固定閾値なし/.test(r.minimum_traffic) },
+  { group:'初心者・サイト条件', slug:'no-site-age', title:'サイト年齢要件なし', short:'新しいサイトから検討', description:'公開された最低サイト年齢の要件がないサービス。媒体審査は別途行われる場合があります。', filter:r=>r.minimum_site_age==='公開要件なし' },
+  { group:'初心者・サイト条件', slug:'zero-setup-fee', title:'初期費用0円', short:'導入費をかけずに開始', description:'公開情報で初期費用0円または0と確認できる広告サービス。', filter:r=>/^(0|0円)$/.test(r.setup_fee) },
+  { group:'初心者・サイト条件', slug:'non-exclusive', title:'独占契約なし', short:'他広告との併用候補', description:'契約上の独占が「なし」と記載されている広告サービス。個別の広告配置規約は確認してください。', filter:r=>/^なし(?:$|\/)/.test(r.contract_exclusivity) },
+  { group:'初心者・サイト条件', slug:'japanese-ui', title:'日本語UI・サポート', short:'日本語で管理しやすい', description:'管理画面またはサポートの日本語対応があるサービス。', filter:r=>/^あり/.test(r.japanese_ui_support) },
+  { group:'サイト・ホスティング', slug:'free-subdomain', title:'無料サブドメイン候補', short:'Blogspotや静的ホストを比較', description:'いずれかの無料URLで公式OK・条件付き・技術推定OKとなるサービス。', filter:r=>['blogspot_free_url','wordpress_com_free_url','github_pages_free_url','vercel_free_subdomain','cloudflare_pages_free_subdomain'].some(k=>['公式OK','条件付き','技術推定OK'].includes(r[k])) },
+  { group:'サイト・ホスティング', slug:'github-pages', title:'GitHub Pages候補', short:'github.ioで試せる可能性', description:'GitHub Pages無料URLで技術的に設置可能、または条件付きで審査対象となる候補。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.github_pages_free_url) },
+  { group:'サイト・ホスティング', slug:'blogspot', title:'Blogspot候補', short:'無料ブログから収益化', description:'Blogspot無料URLで公式OK、条件付き、または技術推定OKのサービス。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.blogspot_free_url) },
+  { group:'サイト・ホスティング', slug:'wordpress-com', title:'WordPress.com候補', short:'無料WordPressを比較', description:'WordPress.com無料URLで公式OK、条件付き、または技術推定OKのサービス。広告コード設置可否も確認してください。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.wordpress_com_free_url) },
+  { group:'サイト・ホスティング', slug:'vercel', title:'Vercel候補', short:'vercel.appでの技術適合', description:'Vercel無料サブドメインで公式OK、条件付き、または技術推定OKのサービス。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.vercel_free_subdomain) },
+  { group:'サイト・ホスティング', slug:'cloudflare-pages', title:'Cloudflare Pages候補', short:'pages.devでの技術適合', description:'Cloudflare Pages無料サブドメインで公式OK、条件付き、または技術推定OKのサービス。', filter:r=>['公式OK','条件付き','技術推定OK'].includes(r.cloudflare_pages_free_subdomain) },
+  { group:'サイト・ホスティング', slug:'static-sites', title:'静的サイト対応候補', short:'HTML・JavaScriptで導入', description:'静的HTMLサイトへ技術的に導入できると判断した広告サービス。媒体承認は別途必要です。', filter:r=>/技術推定OK|技術的OK|広告タグを置ければ/.test(r.static_site_technical_fit) },
+  { group:'支払い方法', slug:'japan-bank', title:'日本の銀行だけで完結', short:'外部ウォレットを経由しない', description:'日本の銀行口座への支払いを公式情報で確認できたサービス。', filter:r=>r.japan_bank_only_complete==='Yes' },
+  { group:'支払い方法', slug:'paypal', title:'PayPal対応', short:'PayPalで広告収益を受取', description:'Publisherへの支払い方法としてPayPal対応を確認できた広告サービス。地域やアカウント条件を確認してください。', filter:r=>/^Yes/.test(r.paypal) },
+  { group:'支払い方法', slug:'payoneer', title:'Payoneer対応', short:'国境を越えた受取手段', description:'Publisherへの支払い方法としてPayoneer対応を確認できた広告サービス。', filter:r=>/^Yes/.test(r.payoneer) },
+  { group:'支払い方法', slug:'wise-revolut', title:'Wise・Revolut対応', short:'海外送金サービスを利用', description:'Wise、Revolut、Payseraの対応を明示的に確認できた広告サービス。', filter:r=>/Wise Yes|Revolut Yes|Revolutあり|Wise\/Revolut\/Paysera Yes/.test(r.wise_revolut) },
+  { group:'支払い方法', slug:'stripe', title:'Stripe対応', short:'StripeでPublisher支払', description:'Publisherへの支払いレールとしてStripe対応を確認できた広告サービス。', filter:r=>/^Yes/.test(r.stripe_payout) },
+  { group:'支払い方法', slug:'crypto', title:'暗号資産払い対応', short:'暗号資産ウォレットで受取', description:'Publisher報酬の暗号資産払いに対応すると確認できた広告サービス。', filter:r=>/^Yes/.test(r.crypto) },
+  { group:'支払い方法', slug:'international-wire', title:'国際銀行送金対応', short:'Wire・SWIFTで海外から受取', description:'International Wire、Bank Wire、SWIFTなど国境を越える銀行送金に対応するサービス。手数料と最低額に注意してください。', filter:r=>/Wire|SWIFT/i.test(r.bank_method) },
+  { group:'支払い方法', slug:'local-bank-transfer', title:'Local Bank Transfer対応', short:'現地銀行向け送金', description:'Local Bank Transferまたは国内銀行振込に対応する広告サービス。利用国と通貨条件を確認してください。', filter:r=>/Local [Bb]ank|国内銀行|日本国内銀行/.test(r.bank_method) },
+  { group:'支払い方法', slug:'low-payout', title:'低い支払基準', short:'初回出金までを短く', description:'全体の最低支払額が円建て8,000円以下、または外貨100以下と読み取れるサービス。支払方法により条件が変わります。', filter:r=>/500円|3,000円|5,000円|8,000円|\$1\b|\$5\b|\$20\b|\$25\b|\$50\b|\$100\b|20 EUR/.test(r.minimum_payout_overall) },
+  { group:'広告形式・運用', slug:'banner-ads', title:'バナー広告対応', short:'標準的なディスプレイ枠', description:'バナー広告形式を明示している広告サービス。', filter:r=>/Banner|バナー/i.test(r.ad_formats) },
+  { group:'広告形式・運用', slug:'native-ads', title:'ネイティブ広告', short:'コンテンツになじむ形式', description:'Native、In-text、レコメンド型広告を扱うサービス。', filter:r=>/Native|ネイティブ|InText|In-text|レコメンド/i.test(`${r.platform_type} ${r.ad_formats}`) },
+  { group:'広告形式・運用', slug:'video-ads', title:'動画広告対応', short:'Video広告を掲載', description:'動画またはVideo広告形式を明示している広告サービス。', filter:r=>/Video|動画/i.test(r.ad_formats) },
+  { group:'広告形式・運用', slug:'pop-push-ads', title:'Pop・Push広告対応', short:'高い収益性と強いUX', description:'Popunder、Onclick、Pushなど侵襲性が比較的高い広告形式を扱うサービス。', filter:r=>/Pop|Push|Onclick/i.test(r.ad_formats) },
+  { group:'広告形式・運用', slug:'programmatic', title:'Programmatic・Header Bidding', short:'運用型広告で収益最適化', description:'Programmatic、Header Bidding、SSP、RTBを扱う広告サービス。', filter:r=>/Programmatic|Header|SSP|RTB/i.test(`${r.platform_type} ${r.header_bidding_or_programmatic}`) },
+  { group:'広告形式・運用', slug:'adult-supported', title:'成人向けカテゴリ対応', short:'成人向け媒体を正式対応', description:'成人向けカテゴリを正式に扱うと確認できた広告サービス。個別規約を必ず確認してください。', filter:r=>/成人向けカテゴリを正式に扱う/.test(r.adult_policy) },
+  { group:'広告形式・運用', slug:'brand-safe', title:'ブランドセーフ重視', short:'品質・安全性を重視', description:'ブランドセーフまたはブランドセーフティ審査を明示する広告サービス。', filter:r=>/ブランドセーフ/.test(r.adult_policy) },
+  { group:'市場・成長段階', slug:'domestic', title:'国内サービス', short:'日本語対応を重視', description:'日本企業が運営する国内向け広告ネットワーク・SSP。', filter:r=>r.home_region.includes('日本') },
+  { group:'市場・成長段階', slug:'growth', title:'成長後の乗り換え先', short:'1万PV以上・運用型', description:'一定の規模や収益実績を求めるManaged Programmatic・成長メディア向けサービス。', filter:r=>/Growth|Enterprise/.test(r.beginner_tier) }
+].filter(category => rows.some(category.filter));
 
 function layout({title, description, path='/', body, schema='', robots='index,follow'}) {
   return `<!doctype html>
@@ -62,9 +83,11 @@ function toolbar() {
 }
 
 function homePage() {
+  const featuredSlugs = ['beginner','japan-bank','paypal','international-wire','free-subdomain','github-pages','low-payout','native-ads'];
+  const featuredCategories = featuredSlugs.map(slug => categories.find(category => category.slug === slug)).filter(Boolean);
   const itemList = JSON.stringify({'@context':'https://schema.org','@type':'ItemList',name:'広告プラットフォーム比較',numberOfItems:rows.length,itemListElement:rows.map((r,i)=>({'@type':'ListItem',position:i+1,url:canonical(`/services/${r.slug}/`),name:r.service_name}))});
   const body = `<section class="hero"><div class="wrap hero-grid"><div><p class="eyebrow">Japanese Publisher Database · 2026</p><h1>広告を、単価ではなく<br><em>始めやすさ</em>で選ぶ。</h1><p class="lead">日本語サイト、無料URL、日本の銀行口座。あなたの今の条件から、使える広告プラットフォームを絞り込みます。</p></div><aside class="hero-panel"><div class="big-number">30</div><div class="metric-label">広告サービスを同一基準で比較</div><p class="metric-sub">60以上の調査項目／公式情報と技術推定を分離／毎月更新を想定</p></aside></div></section>
-  <section class="section"><div class="wrap"><div class="section-head"><div><p class="eyebrow">Quick paths</p><h2>条件から近道する</h2></div><p>よく使う選別条件は、検索エンジンから直接たどれる静的カテゴリページにもしています。</p></div><div class="category-grid">${categories.slice(0,8).map(c=>`<a class="category-tile" href="${href(`/categories/${c.slug}/`)}"><strong>${esc(c.title)}</strong><span>${esc(c.short)} →</span></a>`).join('')}</div></div></section>
+  <section class="section"><div class="wrap"><div class="section-head"><div><p class="eyebrow">Quick paths</p><h2>条件から近道する</h2></div><p>よく使う選別条件は、検索エンジンから直接たどれる静的カテゴリページにもしています。</p></div><div class="category-grid">${featuredCategories.map(c=>`<a class="category-tile" href="${href(`/categories/${c.slug}/`)}"><strong>${esc(c.title)}</strong><span>${esc(c.short)} →</span></a>`).join('')}</div></div></section>
   <section class="section" id="database"><div class="wrap"><div class="section-head"><div><p class="eyebrow">Full database</p><h2>全サービスを比較</h2></div><p>「技術的に貼れる」と「審査で承認される」は別です。各詳細ページで根拠レベルも確認してください。</p></div>${toolbar()}<div class="cards">${rows.map(card).join('')}</div></div></section>`;
   return layout({title:'広告プラットフォーム比較DB｜日本語サイト初心者向け',description:'日本語サイトの広告サービス30社を、初心者適性、最低PV、日本の銀行振込、無料サブドメイン対応で比較。',body,schema:itemList});
 }
@@ -100,7 +123,9 @@ function categoryPage(c) {
 }
 
 function categoriesPage() {
-  const body = `<section class="page-intro"><div class="wrap"><p class="eyebrow">Explore by condition</p><h1>条件別カテゴリ</h1><p class="lead">サイト規模、受取方法、無料URL、広告形式から候補を絞り込めます。</p></div></section><section class="section"><div class="wrap"><div class="category-grid">${categories.map(c=>`<a class="category-tile" href="${href(`/categories/${c.slug}/`)}"><strong>${esc(c.title)}</strong><span>${rows.filter(c.filter).length}サービス · ${esc(c.short)} →</span></a>`).join('')}</div></div></section>`;
+  const groups = [...new Set(categories.map(category => category.group))];
+  const groupedCategories = groups.map(group => `<section class="category-group"><div class="section-head"><div><p class="eyebrow">Genre</p><h2>${esc(group)}</h2></div></div><div class="category-grid">${categories.filter(category => category.group === group).map(c=>`<a class="category-tile" href="${href(`/categories/${c.slug}/`)}"><strong>${esc(c.title)}</strong><span>${rows.filter(c.filter).length}サービス · ${esc(c.short)} →</span></a>`).join('')}</div></section>`).join('');
+  const body = `<section class="page-intro"><div class="wrap"><p class="eyebrow">Explore by condition</p><h1>条件別カテゴリ</h1><p class="lead">サイト規模、受取方法、無料URL、広告形式から${categories.length}ジャンルに絞り込めます。</p></div></section><section class="section"><div class="wrap">${groupedCategories}</div></section>`;
   return layout({title:'広告サービスの条件別カテゴリ一覧｜広告DB',description:'初心者向け、日本の銀行振込、無料サブドメイン、最低PVなしなどの条件から広告サービスを選べます。',path:'/categories/',body});
 }
 
