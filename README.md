@@ -12,7 +12,7 @@ npm run check
 npm run serve
 ```
 
-`http://localhost:4173/` で確認できます。生成物はGitHub Pages公開用の `docs/` です。
+`http://localhost:4173/` で確認できます。生成物はGitHub Pages公開用の `docs/` です。標準の公開パスは `/DB-ad-platform` に設定されています。
 
 本番ビルドでは公開URLを指定してください。
 
@@ -20,7 +20,7 @@ npm run serve
 SITE_URL=https://example.jp npm run build
 ```
 
-GitHub PagesのProject Siteなど、サブディレクトリ配信では `BASE_PATH` も指定します。
+Repository名を変更する場合や別のProject Siteで配信する場合は `BASE_PATH` も指定します。
 
 ```bash
 SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build

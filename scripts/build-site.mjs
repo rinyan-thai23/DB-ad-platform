@@ -5,7 +5,7 @@ const root = process.cwd();
 const dist = join(root, 'docs');
 const dataFile = join(root, 'ad_network_database_2026-08-11.tsv');
 const siteUrl = (process.env.SITE_URL || 'https://example.com').replace(/\/$/, '');
-const basePath = (process.env.BASE_PATH || '').replace(/\/$/, '');
+const basePath = (process.env.BASE_PATH ?? '/DB-ad-platform').replace(/\/$/, '');
 const generatedAt = '2026-08-11';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
