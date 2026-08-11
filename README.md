@@ -66,3 +66,5 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 アフィリエイトURL、調査ソース、生成ロジックは公開Repositoryにそのまま含める方針です。AIエージェントも本READMEの構成・更新手順に従ってください。
 
 カテゴリは `scripts/build-site.mjs` の定義とTSVの値から生成します。該当サービスが1件以上あるカテゴリだけを公開し、0件のカテゴリは生成しません。たとえばStripe Publisher支払いは現在0件のため非公開ですが、将来 `stripe_payout=Yes` の行が追加されると自動的に生成されます。
+
+サイト種類の大分類は `custom_domain_category` を使用します。無料URL5種のどれかに候補があれば「独自ドメインなしでも候補」、候補がなければ保守的に「独自ドメイン必須」とします。細かなホスティング別判定は既存列を維持します。

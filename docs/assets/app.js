@@ -1,6 +1,7 @@
 const cards = [...document.querySelectorAll('[data-service-card]')];
 const controls = {
   search: document.querySelector('#search'),
+  domain: document.querySelector('#domain'),
   score: document.querySelector('#score'),
   bank: document.querySelector('#bank'),
   payment: document.querySelector('#payment'),
@@ -24,6 +25,7 @@ function applyFilters() {
   for (const card of cards) {
     const matches = (!query || card.dataset.search.includes(query))
       && (!controls.score.value || Number(card.dataset.score) >= Number(controls.score.value))
+      && (!controls.domain.value || card.dataset.domain === controls.domain.value)
       && (!controls.bank.value || card.dataset.bank === controls.bank.value)
       && includesToken(card.dataset.payment, controls.payment.value)
       && includesToken(card.dataset.hosting, controls.hosting.value)

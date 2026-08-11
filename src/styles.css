@@ -125,6 +125,11 @@ h1 { margin:0; font-size:clamp(42px,7vw,82px); }
 .genre-chip:hover { border-color:var(--lime); background:rgba(216,244,91,.1); }
 .genre-chip small { color:#b7c3bb; font-size:10px; }
 .genre-chip strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; }
+.domain-verdict { margin-bottom:24px; padding:18px; border-radius:16px; background:#edf3e9; }
+.domain-verdict span { display:block; color:var(--muted); font-size:11px; font-weight:900; }
+.domain-verdict strong { display:block; margin-top:5px; color:var(--green-dark); font-size:22px; }
+.domain-verdict p { margin:8px 0 0; color:var(--muted); font-size:13px; }
+.subheading { margin:0 0 8px; font-size:17px; letter-spacing:-.02em; }
 .facts { display:grid; grid-template-columns:190px 1fr; margin:0; }
 .facts dt,.facts dd { margin:0; padding:12px 0; border-top:1px solid var(--line); }
 .facts dt { padding-right:18px; color:var(--muted); font-size:13px; font-weight:800; }

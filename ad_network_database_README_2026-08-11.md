@@ -6,7 +6,7 @@
 
 ## 収録
 - 30サービス
-- 60カラム
+- 63カラム
 - 国内アドネットワーク、国内SSP、海外セルフサーブ、Native、Managed Programmatic、Enterpriseを同一スキーマで比較
 
 ## データ品質
@@ -16,6 +16,14 @@
 - `source_domain_url` は個別ホスト名や無料サブドメインを公式に扱うページがある場合だけ記録
 
 ## 重要な読み方
+### 0. 独自ドメインの大分類
+検索用の `custom_domain_category` は次の2値です。
+
+- `独自ドメインなしでも候補`: Blogspot / WordPress.com / GitHub Pages / Vercel / Cloudflare Pagesのいずれかが公式OK・条件付き・技術推定OK
+- `独自ドメイン必須`: 上記5種類に候補がなく、保守的に独自ドメイン前提として扱う
+
+「なしでも候補」は媒体審査の承認保証ではありません。個別の根拠は既存の無料URL列と `hosting_evidence_level` を確認してください。
+
 ### 1. 「技術的に貼れる」と「広告会社が審査で承認する」は別
 GitHub Pages / Vercel / Cloudflare PagesはHTML/JSを配信できますが、
 広告ネットワーク側が `*.github.io` / `*.vercel.app` / `*.pages.dev` を媒体として承認するかは別問題です。

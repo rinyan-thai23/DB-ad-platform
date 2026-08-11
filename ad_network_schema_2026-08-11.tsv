@@ -61,3 +61,4 @@ source_domain_url	url		独自/無料ドメイン判断の公式ソース
 notes	string		注意点・矛盾・更新時の再確認事項
 slug	string	lowercase-kebab-case	個別HTMLページの固定URL。公開後は原則変更しない
 affiliate_url	url		成果リンクを使用する場合の遷移先。空欄時はofficial_site_urlを使用
+custom_domain_category	enum	独自ドメイン必須 / 独自ドメインなしでも候補	サイト選定用の大分類。5種の無料URL列に公式OK・条件付き・技術推定OKが1件でもあれば「なしでも候補」、なければ保守的に「必須」

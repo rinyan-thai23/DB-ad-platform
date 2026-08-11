@@ -21,6 +21,20 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
+  $positiveHostValues = @('公式OK', '条件付き', '技術推定OK')
+  $hasFreeUrlCandidate = @(
+    $row.blogspot_free_url,
+    $row.wordpress_com_free_url,
+    $row.github_pages_free_url,
+    $row.vercel_free_subdomain,
+    $row.cloudflare_pages_free_subdomain
+  ) | Where-Object { $_ -in $positiveHostValues }
+  $domainCategory = if ($hasFreeUrlCandidate.Count -gt 0) { '独自ドメインなしでも候補' } else { '独自ドメイン必須' }
+  if (-not $row.PSObject.Properties['custom_domain_category']) {
+    $row | Add-Member -NotePropertyName custom_domain_category -NotePropertyValue $domainCategory
+  } else {
+    $row.custom_domain_category = $domainCategory
+  }
 }
 
 $jpFitMap = @{
