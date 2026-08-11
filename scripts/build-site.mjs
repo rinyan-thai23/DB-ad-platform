@@ -1,5 +1,6 @@
 import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const root = process.cwd();
 const dist = join(root, 'docs');
@@ -7,6 +8,7 @@ const dataFile = join(root, 'ad_network_database_2026-08-11.tsv');
 const siteUrl = (process.env.SITE_URL || 'https://example.com').replace(/\/$/, '');
 const basePath = (process.env.BASE_PATH ?? '/DB-ad-platform').replace(/\/$/, '');
 const generatedAt = '2026-08-11';
+const assetVersion = createHash('sha256').update(await readFile(join(root, 'src', 'styles.css'))).update(await readFile(join(root, 'src', 'app.js'))).digest('hex').slice(0, 10);
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const href = path => `${basePath}${path}` || '/';
@@ -58,14 +60,14 @@ function layout({title, description, path='/', body, schema='', robots='index,fo
 <html lang="ja"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}">
-<link rel="canonical" href="${esc(canonical(path))}"><link rel="stylesheet" href="${href('/assets/styles.css')}">
+<link rel="canonical" href="${esc(canonical(path))}"><link rel="stylesheet" href="${href('/assets/styles.css')}?v=${assetVersion}">
 <meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical(path))}">
 ${schema ? `<script type="application/ld+json">${schema}</script>` : ''}
 </head><body><a class="skip" href="#main">本文へ移動</a>
 <header class="site-header"><div class="wrap header-inner"><a class="brand" href="${href('/')}"><span class="brand-mark">AD</span><span>広告DB 日本版</span></a><nav class="nav" aria-label="メインナビ"><a href="${href('/#database')}">広告を探す</a><a href="${href('/categories/')}">カテゴリ</a><a href="${href('/guide/')}">選び方</a><a href="${href('/about/')}">調査方針</a></nav></div></header>
 <main id="main">${body}</main>
 <footer class="site-footer"><div class="wrap footer-inner"><div><strong>広告DB 日本版</strong><br>初心者が条件から広告サービスを比較するための調査データベース。<br>最終確認日: ${generatedAt}</div><div class="footer-links"><a href="${href('/about/')}">運営・調査方針</a><a href="${href('/guide/')}">広告の選び方</a><a href="${href('/categories/')}">カテゴリ一覧</a></div></div></footer>
-<script src="${href('/assets/app.js')}" defer></script></body></html>`;
+<script src="${href('/assets/app.js')}?v=${assetVersion}" defer></script></body></html>`;
 }
 
 function tags(r) {
@@ -88,7 +90,7 @@ function card(r) {
 }
 
 function toolbar() {
-  return `<div class="filter-panel"><div class="filter-heading"><div><p class="eyebrow">条件を組み合わせて検索</p><h3>あなたのサイトに合う広告を探す</h3></div><button class="reset-button" id="reset-filters" type="button">条件をリセット</button></div><div class="toolbar" aria-label="広告サービスを絞り込む"><div class="field field-search"><label for="search">サービス名・特徴</label><input id="search" type="search" placeholder="例: AdSense、ネイティブ広告"></div><div class="field"><label for="score">始めやすさ</label><select id="score"><option value="">指定なし</option><option value="4">4点以上</option><option value="3">3点以上</option><option value="2">2点以上</option></select></div><div class="field"><label for="bank">日本の銀行だけで完結</label><select id="bank"><option value="">指定なし</option><option value="Yes">対応</option><option value="Conditional">条件付き</option><option value="Unknown">不明</option></select></div><div class="field"><label for="payment">受取方法</label><select id="payment"><option value="">指定なし</option><option value="paypal">PayPal</option><option value="payoneer">Payoneer</option><option value="wise-revolut">Wise・Revolut</option><option value="crypto">暗号資産</option><option value="wire">国際銀行送金</option><option value="local-bank">国内・現地銀行送金</option></select></div><div class="field"><label for="hosting">無料URL・ホスティング</label><select id="hosting"><option value="">指定なし</option><option value="blogspot">Blogspot</option><option value="wordpress">WordPress.com</option><option value="github">GitHub Pages</option><option value="vercel">Vercel</option><option value="cloudflare">Cloudflare Pages</option></select></div><div class="field"><label for="format">広告形式</label><select id="format"><option value="">指定なし</option><option value="banner">バナー</option><option value="native">ネイティブ</option><option value="video">動画</option><option value="pop-push">Pop・Push</option><option value="programmatic">運用型・Header Bidding</option></select></div><div class="field"><label for="region">運営地域</label><select id="region"><option value="">指定なし</option><option value="domestic">国内・日本企業</option><option value="overseas">海外サービス</option></select></div></div><p class="result-count" id="result-count"><strong>${rows.length}</strong>件中 ${rows.length}件を表示</p></div>`;
+  return `<form class="filter-panel" id="filter-form"><div class="filter-heading"><div><p class="eyebrow">条件を組み合わせて検索</p><h3>あなたのサイトに合う広告を探す</h3></div><button class="reset-button" id="reset-filters" type="button">条件をリセット</button></div><div class="toolbar" aria-label="広告サービスを絞り込む"><div class="field field-search"><label for="search">サービス名・特徴</label><input id="search" type="search" placeholder="例: AdSense、ネイティブ広告"></div><div class="field"><label for="score">始めやすさ</label><select id="score"><option value="">指定なし</option><option value="4">4点以上</option><option value="3">3点以上</option><option value="2">2点以上</option></select></div><div class="field"><label for="bank">日本の銀行だけで完結</label><select id="bank"><option value="">指定なし</option><option value="Yes">対応</option><option value="Conditional">条件付き</option><option value="Unknown">不明</option></select></div><div class="field"><label for="payment">受取方法</label><select id="payment"><option value="">指定なし</option><option value="paypal">PayPal</option><option value="payoneer">Payoneer</option><option value="wise-revolut">Wise・Revolut</option><option value="crypto">暗号資産</option><option value="wire">国際銀行送金</option><option value="local-bank">国内・現地銀行送金</option></select></div><div class="field"><label for="hosting">無料URL・ホスティング</label><select id="hosting"><option value="">指定なし</option><option value="blogspot">Blogspot</option><option value="wordpress">WordPress.com</option><option value="github">GitHub Pages</option><option value="vercel">Vercel</option><option value="cloudflare">Cloudflare Pages</option></select></div><div class="field"><label for="format">広告形式</label><select id="format"><option value="">指定なし</option><option value="banner">バナー</option><option value="native">ネイティブ</option><option value="video">動画</option><option value="pop-push">Pop・Push</option><option value="programmatic">運用型・Header Bidding</option></select></div><div class="field"><label for="region">運営地域</label><select id="region"><option value="">指定なし</option><option value="domestic">国内・日本企業</option><option value="overseas">海外サービス</option></select></div></div><div class="filter-footer"><p class="result-count" id="result-count" aria-live="polite"><strong>${rows.length}</strong>件中 ${rows.length}件を表示</p><button class="search-button" type="submit">この条件で検索</button></div></form>`;
 }
 
 function homePage() {

@@ -10,6 +10,7 @@ const controls = {
 };
 const count = document.querySelector('#result-count');
 const reset = document.querySelector('#reset-filters');
+const form = document.querySelector('#filter-form');
 
 function includesToken(source, token) {
   return !token || source.split(' ').includes(token);
@@ -30,17 +31,19 @@ function applyFilters() {
       && (!controls.region.value || card.dataset.region === controls.region.value);
 
     card.hidden = !matches;
+    card.style.display = matches ? '' : 'none';
     if (matches) visible++;
   }
 
   count.innerHTML = `<strong>${cards.length}</strong>件中 ${visible}件を表示`;
 }
 
-Object.values(controls).forEach(control => control?.addEventListener(control.tagName === 'INPUT' ? 'input' : 'change', applyFilters));
+form?.addEventListener('submit', event => {
+  event.preventDefault();
+  applyFilters();
+});
 reset?.addEventListener('click', () => {
   Object.values(controls).forEach(control => { if (control) control.value = ''; });
   applyFilters();
   controls.search.focus();
 });
-
-applyFilters();
