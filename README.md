@@ -1,0 +1,66 @@
+# 広告プラットフォーム比較DB（日本語サイト向け）
+
+TSVを唯一のデータソースとして、広告サービスの比較サイトを静的HTMLで生成するRepositoryです。
+
+## テストサイトを生成
+
+Node.js 20以降を用意し、Repository直下で実行します。外部パッケージのインストールは不要です。
+
+```bash
+npm run build
+npm run check
+npm run serve
+```
+
+`http://localhost:4173/` で確認できます。生成物はGitHub Pages公開用の `docs/` です。
+
+本番ビルドでは公開URLを指定してください。
+
+```bash
+SITE_URL=https://example.jp npm run build
+```
+
+GitHub PagesのProject Siteなど、サブディレクトリ配信では `BASE_PATH` も指定します。
+
+```bash
+SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
+```
+
+## データ更新
+
+1. `ad_network_database_2026-08-11.tsv` を更新
+2. 必要なら `ad_network_schema_2026-08-11.tsv` も更新
+3. `npm run build && npm run check`
+4. `docs/` の差分を確認して公開
+
+個別ページURLに使う `slug` は公開後に変更しません。
+
+外部申込リンクは次の優先順位です。
+
+1. `affiliate_url`（値がある場合）
+2. `official_site_url`（affiliate_urlが空欄の場合）
+
+そのため、アフィリエイトリンクの追加・変更はTSVだけで完結します。生成HTMLのCTAには `rel="sponsored nofollow noopener"` が付きます。調査出典は `source_*_url` 列で管理します。
+
+## 生成ページ
+
+- トップ・検索／絞り込み
+- 30サービスの個別HTML
+- 初心者、日本の銀行、無料サブドメイン、GitHub Pages、Blogspot、国内、低支払基準、Native、成長後などのカテゴリHTML
+- 選び方・調査方針
+- sitemap.xml / robots.txt / 404.html
+
+## 月次更新
+
+`main` ブランチへのpushでGitHub Pagesへ自動公開します。毎月1日のGitHub ActionsでもTSVからの再生成とHTML検証を実行します。実データの再調査は `change_risk=High` → `Medium` → `Low` の順に公式ページを確認してください。
+
+## Repository構成
+
+- `docs/`: GitHub Pagesへ公開する生成済みHTML
+- `scripts/`: サイト生成・検証・ローカルプレビュー
+- `src/`: CSS・ブラウザ側JavaScript
+- `tools/`: DB整備用スクリプト
+- `ad_network_database_2026-08-11.tsv`: 公開データ本体
+- `ad_network_schema_2026-08-11.tsv`: 公開スキーマ
+
+アフィリエイトURL、調査ソース、生成ロジックは公開Repositoryにそのまま含める方針です。AIエージェントも本READMEの構成・更新手順に従ってください。

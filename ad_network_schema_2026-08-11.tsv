@@ -1,0 +1,63 @@
+﻿column_name	data_type	controlled_values_or_format	description
+id	integer	1..30	DB内ID
+recommendation_rank_jp_beginner	integer	1..30	日本語初心者・0→1・銀行送金を重視した実用ランキング。広告単価ランキングではない
+service_name	string		サービス名
+company	string		運営会社
+home_region	string		主な本拠地/市場
+platform_type	enum	国内アドネットワーク / SSP / Native / Managed programmatic / Pop-Push等	広告サービスの型
+official_site_url	url		公式トップ
+beginner_tier	enum	S / A / A- / B / C+ / C / Growth / Growth-only / Enterprise	初心者適性
+zero_to_one_score_1_5	integer	1..5	0円→初収益までの容易さ。5が最良
+growth_stage	string		想定ステージ
+japanese_site_fit	enum	公式OK / 条件付き公式OK / 高確度OK / 個別審査 / 実質不向き / 不明	日本語コンテンツ適合度
+japanese_site_fit_reason	string		日本語適合判断の根拠
+japanese_ui_support	string		管理画面/サポートの日本語対応
+minimum_traffic	string		公開されている最小PV/UU/session等。単位をセル内に保持
+minimum_site_age	string		サイト年齢要件
+review_required	string		媒体審査の有無
+review_speed	string		公開されている審査速度
+custom_domain_requirement	enum-like	必須 / 実質必須 / 不明 / 不要等	独自ドメインの必要性
+free_subdomain_policy	string		無料サブドメイン全般に対する公式/推定ポリシー
+hosting_evidence_level	enum	公式明記 / 技術推定 / 不明 / 混在	GitHub/Vercel等の判断根拠レベル
+blogspot_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.blogspot.comのまま使える可能性
+wordpress_com_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	WordPress.com無料URL。広告コード設置可否も別途影響
+github_pages_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.github.ioのままの可能性
+vercel_free_subdomain	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.vercel.appのままの可能性
+cloudflare_pages_free_subdomain	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.pages.devのままの可能性
+static_site_technical_fit	string		静的HTMLサイトへの技術導入可否。審査可否とは別
+install_method	string		JS/HTML/meta/file/DNS/managed等
+ads_txt	string		ads.txt要件
+bank_transfer	enum-like	Yes / No / Conditional / Unknown	銀行振込という手段の有無
+japan_bank_only_complete	enum-like	Yes / Conditional / No / Unknown	PayPal等を使わず日本の銀行口座まで完結できるか
+bank_method	string		国内振込 / Local Bank Transfer / SWIFT / Tipalti eCheck等
+payout_processor	string		Tipalti/Hyperwallet/Google Payments等
+paypal	string		Publisher支払でPayPalを使えるか
+payoneer	string		Payoneer対応
+wise_revolut	string		Wise/Revolut等対応
+stripe_payout	string		StripeをPublisher支払レールとして使えるか。今回調査では主要例ほぼなし
+crypto	string		暗号資産払い
+minimum_payout_overall	string		最も低い支払手段も含む最低支払額
+minimum_payout_bank	string		銀行振込を選んだ場合の最低支払額
+payout_schedule	string		Net30/Net45/Net65/週次等
+payout_currency	string		支払通貨
+payout_fee_note	string		振込/FX/Processor手数料
+setup_fee	string		初期費用
+contract_exclusivity	string		独占・契約拘束のメモ
+ad_models	string		CPM/CPC/CPA/Native等
+ad_formats	string		バナー/Native/Pop/Video等
+header_bidding_or_programmatic	string		RTB/Header bidding/Managed等
+adult_policy	string		成人向け可否/ブランドセーフ性
+AI_content_policy_note	string		AI生成コンテンツに関する明示/品質要件
+adsense_good_standing_required	string		Google/AdSenseの良好状態要件
+UX_intrusiveness_1_5	integer	1..5	広告の侵襲性の目安。1=控えめ、5=Pop/Push等で強い
+beginner_recommendation	string		初心者向けの実務コメント
+change_risk	enum	Low / Medium / High	条件が変わりやすい項目の更新注意度
+confidence	enum	High / Medium / Low-Medium / Low	調査確度
+last_verified_date	date	YYYY-MM-DD	最終確認日
+source_primary_url	url		公式トップ/主要ソース
+source_requirements_url	url		審査・トラフィック条件の公式ソース
+source_payment_url	url		支払条件の公式ソース
+source_domain_url	url		独自/無料ドメイン判断の公式ソース
+notes	string		注意点・矛盾・更新時の再確認事項
+slug	string	lowercase-kebab-case	個別HTMLページの固定URL。公開後は原則変更しない
+affiliate_url	url		成果リンクを使用する場合の遷移先。空欄時はofficial_site_urlを使用

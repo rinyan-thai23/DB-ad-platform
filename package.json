@@ -1,0 +1,11 @@
+{
+  "name": "ad-network-database-jp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs",
+    "serve": "node scripts/serve.mjs",
+    "check": "node scripts/check-site.mjs"
+  }
+}
