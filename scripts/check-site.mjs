@@ -65,6 +65,14 @@ for (const file of categoryPages) {
   }
 }
 
+for (const slug of ['ninja-admax','imobile-ad-network','zucks-ad-network','adsterra','adstir']) {
+  const source = await readFile(join(root, 'services', slug, 'index.html'), 'utf8');
+  if (!source.includes('data-editorial-review')) failures.push(`${slug}: researched review missing`);
+  for (const heading of ['メリット', '注意点', 'こんな人におすすめ']) {
+    if (!source.includes(`<h2>${heading}</h2>`)) failures.push(`${slug}: ${heading} missing`);
+  }
+}
+
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);

@@ -52,3 +52,6 @@ source_payment_url	url		支払条件の公式ソース
 notes	string		注意点・矛盾・更新時の再確認事項
 slug	string	lowercase-kebab-case	個別HTMLページの固定URL。公開後は原則変更しない
 affiliate_url	url		成果リンクを使用する場合の遷移先。空欄時はofficial_site_urlを使用
+pros	string		公式情報とDB項目を基に整理した主なメリット。事実と編集判断を混同しない
+cons	string		申込前に把握したい制約・注意点。上位5件から順次調査
+recommended_for	string		条件と注意点を踏まえた推奨利用者像。上位5件から順次調査

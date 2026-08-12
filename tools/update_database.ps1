@@ -21,6 +21,11 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
+  foreach ($field in @('pros', 'cons', 'recommended_for')) {
+    if (-not $row.PSObject.Properties[$field]) {
+      $row | Add-Member -NotePropertyName $field -NotePropertyValue ''
+    }
+  }
 $domainNotRequiredIds = @('4', '13')
 $domainRequiredIds = @('6', '14', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '28', '29', '30')
   if ($row.id -in $domainNotRequiredIds) {
@@ -29,6 +34,23 @@ $domainRequiredIds = @('6', '14', '16', '17', '18', '19', '20', '21', '22', '23'
     $row.custom_domain_requirement = '必須'
   } else {
     $row.custom_domain_requirement = '要確認'
+  }
+}
+
+$editorialResearch = @{
+  '1' = @{ pros = '最短5分で掲載を始められ、問題がなければ初回バナー表示後30分程度で配信される。30社以上の広告会社を横断して広告を自動選別し、PC・スマートフォンを一つの管理画面で扱える。'; cons = '報酬はまず忍者ポイントで付与され、現金化には交換手続きが必要。広告枠の自動審査があり、禁止コンテンツや枠の状態によっては配信されない。'; recommended_for = '日本語の小規模サイトで、複雑な広告調整をせず、まず少額でも広告収益を発生させたい人。国内サービスと日本円での受取を重視する人。' }
+  '2' = @{ pros = '18歳以上で日本国内の銀行口座があれば登録でき、最低支払額は3,000円。サイト審査は通常2〜3営業日で、他社広告との併用も認められている。'; cons = '振込時に一律250円の事務手数料がかかり、報酬の繰越期限は2年間。サイトごとの審査が必要で、管理画面はスマートフォン向けに最適化されていない。'; recommended_for = '国内銀行で完結させたい日本語サイト運営者で、数日の審査を待てる人。3,000円からの受取と国内事業者の運用を重視する人。' }
+  '3' = @{ pros = 'バナーに加えて動画・ネイティブなど複数形式を扱い、AMPやUnity、AdMobメディエーションにも対応。3,000円を超えた月の翌月末に支払われる。'; cons = '掲載媒体の審査があり、承認日数は公開されていない。振込手数料は一律300円で、報酬の通常の繰越期間は1年間。'; recommended_for = 'スマートフォン向けサイトやアプリで、バナー以外の広告形式も試したい人。国内銀行振込と翌月末払いを重視する人。' }
+  '4' = @{ pros = '最低トラフィック要件がなく、公式案内では承認は約10分。バナー、ネイティブ、Social Bar、Popunder、Smartlinkなど広告形式が多く、Webサイトがない導線にも対応する。'; cons = '管理・サポート情報は英語中心。Popunderやインタースティシャルなどは読者体験を損ねる可能性があるため、形式を選んで慎重に配置する必要がある。支払下限は受取方法ごとに異なる。'; recommended_for = 'AdSense以外を早く試したい小規模サイトや、海外トラフィックも収益化したい人。英語の管理画面や本人確認に対応でき、穏当な広告形式を自分で選べる人。' }
+  '5' = @{ pros = '日本語で登録でき、個人も申込み可能。Webサイトとアプリの両方に対応し、バナー、ネイティブ、動画、インタースティシャルなど複数形式を一つのSSPで扱える。'; cons = '媒体審査があり、審査期間や最低トラフィックの明確な公開目安は確認できない。最低支払額は5,000円（税抜）で、超小規模サイトでは受取まで時間がかかる可能性がある。'; recommended_for = '日本語サポートを重視し、スマートフォン向けサイトまたはアプリを複数の広告形式で収益化したい人。5,000円まで報酬を積み上げられる人。' }
+}
+
+foreach ($row in $rows) {
+  if ($editorialResearch.ContainsKey($row.id)) {
+    $row.pros = $editorialResearch[$row.id].pros
+    $row.cons = $editorialResearch[$row.id].cons
+    $row.recommended_for = $editorialResearch[$row.id].recommended_for
+    $row.last_verified_date = '2026-08-12'
   }
 }
 
