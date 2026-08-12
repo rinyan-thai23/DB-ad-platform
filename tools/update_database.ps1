@@ -21,19 +21,14 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
-  $positiveHostValues = @('公式OK', '条件付き', '技術推定OK')
-  $hasFreeUrlCandidate = @(
-    $row.blogspot_free_url,
-    $row.wordpress_com_free_url,
-    $row.github_pages_free_url,
-    $row.vercel_free_subdomain,
-    $row.cloudflare_pages_free_subdomain
-  ) | Where-Object { $_ -in $positiveHostValues }
-  $domainCategory = if ($hasFreeUrlCandidate.Count -gt 0) { '独自ドメインなしでも候補' } else { '独自ドメイン必須' }
-  if (-not $row.PSObject.Properties['custom_domain_category']) {
-    $row | Add-Member -NotePropertyName custom_domain_category -NotePropertyValue $domainCategory
+  $domainNotRequiredIds = @('4', '6', '13')
+  $domainRequiredIds = @('14', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '28', '29', '30')
+  if ($row.id -in $domainNotRequiredIds) {
+    $row.custom_domain_requirement = '必須ではない'
+  } elseif ($row.id -in $domainRequiredIds) {
+    $row.custom_domain_requirement = '必須'
   } else {
-    $row.custom_domain_category = $domainCategory
+    $row.custom_domain_requirement = '要確認'
   }
 }
 
@@ -113,6 +108,24 @@ $exoClick.payout_currency = 'EUR/USD'
 $exoClick.source_payment_url = 'https://docs.exoclick.com/publishers/payments/payment-options-timescales'
 $exoClick.confidence = 'High'
 $exoClick.notes = '公式Payments文書でWire最低200 EUR/USD、週次Net7または月次Net20を確認。日本の銀行での受取可否・中継銀行手数料は口座ごとに確認。'
+
+$removedDomainColumns = @(
+  'free_subdomain_policy',
+  'hosting_evidence_level',
+  'blogspot_free_url',
+  'wordpress_com_free_url',
+  'github_pages_free_url',
+  'vercel_free_subdomain',
+  'cloudflare_pages_free_subdomain',
+  'static_site_technical_fit',
+  'source_domain_url',
+  'custom_domain_category'
+)
+foreach ($row in $rows) {
+  foreach ($column in $removedDomainColumns) {
+    $row.PSObject.Properties.Remove($column)
+  }
+}
 
 $headers = @($rows[0].PSObject.Properties.Name)
 $output = [System.Collections.Generic.List[string]]::new()

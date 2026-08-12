@@ -16,15 +16,7 @@ minimum_traffic	string		公開されている最小PV/UU/session等。単位を�
 minimum_site_age	string		サイト年齢要件
 review_required	string		媒体審査の有無
 review_speed	string		公開されている審査速度
-custom_domain_requirement	enum-like	必須 / 実質必須 / 不明 / 不要等	独自ドメインの必要性
-free_subdomain_policy	string		無料サブドメイン全般に対する公式/推定ポリシー
-hosting_evidence_level	enum	公式明記 / 技術推定 / 不明 / 混在	GitHub/Vercel等の判断根拠レベル
-blogspot_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.blogspot.comのまま使える可能性
-wordpress_com_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	WordPress.com無料URL。広告コード設置可否も別途影響
-github_pages_free_url	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.github.ioのままの可能性
-vercel_free_subdomain	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.vercel.appのままの可能性
-cloudflare_pages_free_subdomain	enum-like	公式OK / 条件付き / 技術推定OK / 実質NG / 不明	*.pages.devのままの可能性
-static_site_technical_fit	string		静的HTMLサイトへの技術導入可否。審査可否とは別
+custom_domain_requirement	enum	必須 / 必須ではない / 要確認	独自ドメインの必要性を示す検索用の大分類
 install_method	string		JS/HTML/meta/file/DNS/managed等
 ads_txt	string		ads.txt要件
 bank_transfer	enum-like	Yes / No / Conditional / Unknown	銀行振込という手段の有無
@@ -57,8 +49,6 @@ last_verified_date	date	YYYY-MM-DD	最終確認日
 source_primary_url	url		公式トップ/主要ソース
 source_requirements_url	url		審査・トラフィック条件の公式ソース
 source_payment_url	url		支払条件の公式ソース
-source_domain_url	url		独自/無料ドメイン判断の公式ソース
 notes	string		注意点・矛盾・更新時の再確認事項
 slug	string	lowercase-kebab-case	個別HTMLページの固定URL。公開後は原則変更しない
 affiliate_url	url		成果リンクを使用する場合の遷移先。空欄時はofficial_site_urlを使用
-custom_domain_category	enum	独自ドメイン必須 / 独自ドメインなしでも候補	サイト選定用の大分類。5種の無料URL列に公式OK・条件付き・技術推定OKが1件でもあれば「なしでも候補」、なければ保守的に「必須」

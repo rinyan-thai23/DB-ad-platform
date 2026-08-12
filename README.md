@@ -46,7 +46,7 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 - トップ・検索／絞り込み
 - 30サービスの個別HTML
-- 初心者、日本の銀行、PayPal、Payoneer、Wise/Revolut、暗号資産、国際Wire、無料サブドメイン、広告形式などのカテゴリHTML
+- 初心者、日本の銀行、独自ドメイン、PayPal、Payoneer、Wise/Revolut、暗号資産、国際Wire、広告形式などのカテゴリHTML
 - 選び方・調査方針
 - sitemap.xml / robots.txt / 404.html
 
@@ -67,4 +67,4 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 カテゴリは `scripts/build-site.mjs` の定義とTSVの値から生成します。該当サービスが1件以上あるカテゴリだけを公開し、0件のカテゴリは生成しません。たとえばStripe Publisher支払いは現在0件のため非公開ですが、将来 `stripe_payout=Yes` の行が追加されると自動的に生成されます。
 
-サイト種類の大分類は `custom_domain_category` を使用します。無料URL5種のどれかに候補があれば「独自ドメインなしでも候補」、候補がなければ保守的に「独自ドメイン必須」とします。細かなホスティング別判定は既存列を維持します。
+サイト種類は `custom_domain_requirement` の「必須／必須ではない／要確認」で管理します。無料URLサービス別の列は廃止しています。
