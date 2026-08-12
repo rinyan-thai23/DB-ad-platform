@@ -49,6 +49,7 @@ const homeServiceOrder = [...homeSource.matchAll(new RegExp(`href="${basePath}/s
 if (homeServiceOrder[0] !== 'imobile-ad-network') failures.push(`expected i-mobile first, got ${homeServiceOrder[0]}`);
 if (homeServiceOrder.indexOf('ninja-admax') !== 28) failures.push('expected Ninja AdMax at rank 29');
 if (!homeSource.includes('<span class="country-flag" aria-hidden="true">🇨🇾</span>海外/キプロス')) failures.push('Adsterra country flag or label missing');
+if (!homeSource.includes('family=Noto+Color+Emoji&display=swap')) failures.push('Noto Color Emoji stylesheet missing');
 if (!homeSource.includes('<span class="tag paypal">PayPal対応</span>')) failures.push('PayPal status tag missing');
 if (homeSource.includes('日本の銀行のみ:') || homeSource.includes('日本の銀行だけで完結')) failures.push('legacy Japan bank wording remains');
 if (homeSource.includes('<div class="card-type">海外アドネットワーク</div>') || homeSource.includes('<div class="card-type">Popunder広告</div>')) failures.push('legacy service type is still shown on cards');

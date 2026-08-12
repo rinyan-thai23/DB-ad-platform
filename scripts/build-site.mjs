@@ -59,6 +59,9 @@ function layout({title, description, path='/', body, schema='', robots='index,fo
 <html lang="ja"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 <link rel="canonical" href="${esc(canonical(path))}"><link rel="stylesheet" href="${href('/assets/styles.css')}?v=${assetVersion}">
 <meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical(path))}">
 ${schema ? `<script type="application/ld+json">${schema}</script>` : ''}
