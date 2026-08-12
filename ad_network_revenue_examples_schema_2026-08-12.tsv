@@ -1,0 +1,13 @@
+column_name	type	allowed_or_format	description
+record_id	string	REV-001形式	収益例または調査記録の一意ID
+service_id	integer	ad_network_database.id	親サービスID
+service_slug	string	lowercase-kebab-case	親サービスslug
+evidence_status	enum	confirmed / not_found	数値を伴う実例を確認できたか
+source_type	enum	第三者投稿 / 第三者調査 / 運営会社事例 / 公式説明 / 調査記録	情報源の立場
+metric_type	enum	実収益 / RPM・EPMV / CPC・CPM / 収益増加率 / 公開例なし	数値の種類
+result_summary	string		原文を短く要約した収益結果
+period_traffic	string		期間、PV、セッション、広告表示数などの比較母数
+publisher_context	string		媒体ジャンル、地域、広告形式など
+source_url	url		結果を確認できるページ。not_foundは調査先
+caveat	string		比較上の制約、販促事例、情報不足など
+verified_date	date	YYYY-MM-DD	最終確認日

@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 const root = process.cwd();
 const dist = join(root, 'docs');
 const dataFile = join(root, 'ad_network_database_2026-08-11.tsv');
+const revenueFile = join(root, 'ad_network_revenue_examples_2026-08-12.tsv');
 const siteUrl = (process.env.SITE_URL || 'https://example.com').replace(/\/$/, '');
 const basePath = (process.env.BASE_PATH ?? '/DB-ad-platform').replace(/\/$/, '');
 const generatedAt = '2026-08-11';
@@ -14,6 +15,7 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;',
 const href = path => `${basePath}${path}` || '/';
 const canonical = path => `${siteUrl}${basePath}${path}`;
 const rows = parseTsv(await readFile(dataFile, 'utf8')).sort((a,b) => Number(a.recommendation_rank_jp_beginner)-Number(b.recommendation_rank_jp_beginner));
+const revenueExamples = parseTsv(await readFile(revenueFile, 'utf8'));
 
 function parseTsv(text) {
   const lines = text.replace(/^\uFEFF/, '').trimEnd().split(/\r?\n/);
@@ -111,11 +113,6 @@ const sections = [
 ];
 
 function factList(r, fields) { return `<dl class="facts">${fields.map(k=>`<dt>${esc(labels[k])}</dt><dd>${esc(r[k] || '不明')}</dd>`).join('')}</dl>`; }
-function voiceList(items, urls) {
-  const points = (items || '').split('｜').filter(Boolean);
-  const sources = (urls || '').split('|');
-  return `<ul class="voice-list">${points.map((point,index)=>`<li><span>${esc(point)}</span>${sources[index] ? `<a href="${esc(sources[index])}" rel="nofollow noopener" target="_blank">体験記事を確認</a>` : ''}</li>`).join('')}</ul>`;
-}
 function servicePage(r) {
   const outbound = r.affiliate_url || r.official_site_url;
   const sources = [...new Set([r.source_primary_url,r.source_requirements_url,r.source_payment_url].filter(Boolean))];
@@ -125,8 +122,9 @@ function servicePage(r) {
   const schema = JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'SoftwareApplication',name:r.service_name,applicationCategory:'AdvertisingApplication',operatingSystem:'Web',url:canonical(`/services/${r.slug}/`),description,provider:{'@type':'Organization',name:r.company,url:r.official_site_url}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'トップ',item:canonical('/')},{'@type':'ListItem',position:2,name:'広告サービス',item:canonical('/#database')},{'@type':'ListItem',position:3,name:r.service_name,item:canonical(`/services/${r.slug}/`)}]}]});
   const bankDisplay = r.japan_bank_only_complete === 'Yes' ? '対応' : r.japan_bank_only_complete === 'Conditional' ? '条件付き' : r.japan_bank_only_complete === 'No' ? '非対応' : '不明';
   const domainNote = r.custom_domain_requirement === '必須' ? 'このサービスでは独自ドメインが必要です。' : r.custom_domain_requirement === '必須ではない' ? '独自ドメインがなくても申請候補になります。媒体審査の通過は保証されません。' : '公開情報だけでは断定できません。申請前に公式情報または担当者へ確認してください。';
-  const editorial = r.pros && r.cons && r.recommended_for ? `<div class="editorial-grid" data-editorial-review><p class="voice-note">第三者の体験記事・レビューを要約しています。収益や審査結果は媒体・時期・アクセス地域で変わるため、個人の体験としてお読みください。</p><section class="editorial-card editorial-pros"><p class="eyebrow">PROS</p><h2>利用者が挙げた良い点</h2>${voiceList(r.pros,r.pros_source_urls)}</section><section class="editorial-card editorial-cons"><p class="eyebrow">CONS</p><h2>利用者が挙げた注意点</h2>${voiceList(r.cons,r.cons_source_urls)}</section><section class="editorial-card editorial-fit"><p class="eyebrow">BEST FOR</p><h2>口コミから見る、こんな人におすすめ</h2><p>${esc(r.recommended_for)}</p></section></div>` : '';
-  const adsenseWarning = (r.id === '6' ? `<div class="panel warning-panel"><p class="eyebrow">本DBでの位置づけ</p><h2>AdSenseは代替候補ではありません</h2><p>このDBは、AdSenseの審査に通らず次の収益化方法を探している人を主な対象にしています。AdSenseは比較基準として残していますが、初心者向け順位は最下位です。不承認理由はコンテンツ量・品質・ナビゲーション・トラフィックなど複数にわたり、修正箇所を絞り込みにくい場合があります。</p><a class="text-link" href="${href('/categories/adsense-alternatives/')}">AdSense以外の候補を見る</a></div>` : '') + editorial;
+  const serviceRevenue = revenueExamples.filter(example => example.service_id === r.id && example.evidence_status === 'confirmed');
+  const revenuePanel = `<div class="panel revenue-panel" data-revenue-examples><div class="panel-heading"><div><p class="eyebrow">公開された実測・事例</p><h2>実際の収益例</h2></div><strong>${serviceRevenue.length}件</strong></div><p class="revenue-disclaimer">他サイトの結果であり、同額の収益を保証するものではありません。運営会社掲載の事例は販促目的を含むため、第三者投稿と区別しています。</p>${serviceRevenue.length ? `<div class="revenue-list">${serviceRevenue.map(example=>`<article class="revenue-example"><div class="revenue-meta"><span>${esc(example.source_type)}</span><span>${esc(example.metric_type)}</span></div><h3>${esc(example.result_summary)}</h3><dl><dt>期間・母数</dt><dd>${esc(example.period_traffic || '詳細非公開')}</dd><dt>媒体・地域</dt><dd>${esc(example.publisher_context || '詳細非公開')}</dd></dl><a href="${esc(example.source_url)}" rel="nofollow noopener" target="_blank">出典を確認</a>${example.caveat ? `<p>${esc(example.caveat)}</p>` : ''}</article>`).join('')}</div>` : '<p class="empty-revenue">金額・RPM・CPC・増加率を確認できる公開事例は見つかっていません。</p>'}</div>`;
+  const adsenseWarning = (r.id === '6' ? `<div class="panel warning-panel"><p class="eyebrow">本DBでの位置づけ</p><h2>AdSenseは代替候補ではありません</h2><p>このDBは、AdSenseの審査に通らず次の収益化方法を探している人を主な対象にしています。AdSenseは比較基準として残していますが、初心者向け順位は最下位です。不承認理由はコンテンツ量・品質・ナビゲーション・トラフィックなど複数にわたり、修正箇所を絞り込みにくい場合があります。</p><a class="text-link" href="${href('/categories/adsense-alternatives/')}">AdSense以外の候補を見る</a></div>` : '') + revenuePanel;
   const body = `<div class="wrap breadcrumb"><a href="${href('/')}">トップ</a> / <a href="${href('/#database')}">広告サービス</a> / ${esc(r.service_name)}</div><section class="detail-hero"><div class="wrap"><div class="detail-title"><div><p class="eyebrow">${esc(r.platform_type)}</p><h1>${esc(r.service_name)}</h1><p class="lead">${esc(r.beginner_recommendation)}</p></div><div class="rank-box"><span>初心者向け順位</span><b>${esc(r.recommendation_rank_jp_beginner)}</b><small>30サービス中</small></div></div><div class="summary-grid"><div class="summary-cell"><span>初収益までの始めやすさ</span><b>${esc(r.zero_to_one_score_1_5)} / 5点</b></div><div class="summary-cell"><span>日本語サイト</span><b>${esc(r.japanese_site_fit)}</b></div><div class="summary-cell"><span>最低トラフィック</span><b>${esc(r.minimum_traffic)}</b></div><div class="summary-cell"><span>日本の銀行だけで完結</span><b>${bankDisplay}</b></div></div></div></section>
   <section class="section"><div class="wrap detail-layout"><div>${adsenseWarning}<div class="panel genre-panel" data-related-genres><div class="panel-heading"><div><p class="eyebrow">該当ジャンル・${relatedCategories.length}件</p><h2>このサービスが属するジャンル</h2></div><a class="text-link" href="${href('/categories/')}">全ジャンルを見る</a></div><div class="genre-list">${relatedCategories.map(category=>`<a class="genre-chip" href="${href(`/categories/${category.slug}/`)}"><small>${esc(category.group)}</small><strong>${esc(category.title)}</strong></a>`).join('')}</div></div><div class="panel"><h2>独自ドメイン</h2><div class="domain-verdict"><span>サイト条件</span><strong>${esc(r.custom_domain_requirement)}</strong><p>${domainNote}</p></div></div>${sections.map(([name,fields])=>`<div class="panel"><h2>${name}</h2>${factList(r,fields)}</div>`).join('')}<div class="panel"><h2>一次情報・参照先</h2>${sources.length?`<ul class="sources">${sources.map(u=>`<li><a href="${esc(u)}" rel="nofollow noopener" target="_blank">${esc(u)}</a></li>`).join('')}</ul>`:'<p>公開一次情報のURLは確認できていません。</p>'}${r.notes?`<p class="notice">${esc(r.notes)}</p>`:''}</div></div><aside class="sticky"><div class="panel"><p class="eyebrow">公式サイト</p><h2>${esc(r.service_name)}を確認</h2><p>申込前に最新条件を公式サイトまたは管理画面で再確認してください。</p><a class="cta" href="${esc(outbound)}" rel="sponsored nofollow noopener" target="_blank">公式サイトへ進む</a><p class="disclosure">affiliate_urlが設定されている場合は、成果報酬リンクへ自動的に切り替わります。</p></div></aside></div></section>`;
   return layout({title,description,path:`/services/${r.slug}/`,body,schema});

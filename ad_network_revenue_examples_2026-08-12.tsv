@@ -1,0 +1,61 @@
+record_id	service_id	service_slug	evidence_status	source_type	metric_type	result_summary	period_traffic	publisher_context	source_url	caveat	verified_date
+REV-001	1	ninja-admax	confirmed	第三者投稿	実収益	合計17円	12か月・広告表示36,721回	小規模な日本語ブログ	https://shingonotsunaten.com/review-ninjaadmax/	1媒体の結果。AdSense開始前後を含む	2026-08-12
+REV-002	1	ninja-admax	confirmed	第三者投稿	実収益	約50円	約1か月・月間約10万PV	成人向け日本語ブログ	https://eroguyaruo.hatenablog.com/entry/2019/03/07/130540	古い事例で成人向け媒体。現在の単価を示さない	2026-08-12
+REV-003	2	imobile-ad-network	confirmed	第三者投稿	CPC・CPM	1クリック約2〜8円との運用目安	PV・期間の詳細非公開	日本語ブログ	https://kosuke0001.com/i-mobile-adnetwork/	管理画面画像による厳密な実測範囲は確認できない	2026-08-12
+REV-004	2	imobile-ad-network	confirmed	第三者投稿	実収益	古い無料ブログで月約1,000円が継続したとの投稿紹介	期間不明	FC2無料ブログ	https://amenof.com/comicblog/i-mobile-affiliate-reputation/	原投稿の転載要約で一次性が低い	2026-08-12
+REV-005	3	zucks-ad-network	confirmed	第三者投稿	CPC・CPM	クリック単価はほぼ10円前後、表示収益はかなり低いとの検証	月間約30万PVの媒体で試験	日本語ブログ	https://nobutoblog.com/zucks-ad-network/	単一媒体・単一運営者の結果	2026-08-12
+REV-006	3	zucks-ad-network	not_found	調査記録	公開例なし	別の金額付き第三者実例を確認できず	検索・公式事例ページを調査	国内モバイル広告	https://zucks.co.jp/publisher/adnetwork/	公式ページは機能説明のみで収益額非公開	2026-08-12
+REV-007	4	adsterra	confirmed	運営会社事例	実収益	累計35.5万ドル超、2025年には月1.8万ドル	複数年	日本のスポーツサイト	https://adsterra.com/blog/japanese-sports-site-case-study/	運営会社が選定した大型成功事例	2026-08-12
+REV-008	4	adsterra	confirmed	運営会社事例	実収益	月2,700ドル	月次	SEO流入のサイト	https://adsterra.com/blog/case-study-how-to-make-money-with-adsterra-two-friends-made-2700-per-month/	運営会社掲載の成功事例	2026-08-12
+REV-009	5	adstir	confirmed	第三者投稿	CPC・CPM	1クリック1〜3円、CPM 10.47との公開例	直近期間の詳細非公開	日本語ブログ	https://sadaono.com/article/sidejob/adstir-review	単一媒体の結果。主広告ではなく補助利用を推奨している	2026-08-12
+REV-010	5	adstir	confirmed	第三者投稿	CPC・CPM	クリック率は約2%との運用例	期間・PV非公開	日本語ブログ	https://sadaono.com/article/sidejob/adstir-review	収益額ではなくクリック率の実測	2026-08-12
+REV-011	6	google-adsense	confirmed	第三者投稿	実収益	月298ドル、Page RPM約2.63ドル	月間約113,000PV	ブログ	https://www.reddit.com/r/Blogging/comments/1qt9dx0/my_blog_made_298_in_january_2026_from_adsense/	自己申告投稿	2026-08-12
+REV-012	6	google-adsense	confirmed	第三者投稿	実収益	月365ドル	月間約154,000PV	ブログ	https://www.reddit.com/r/Blogging/comments/1olrz0x/my_blog_made_365_in_october_through_adsense/	自己申告投稿	2026-08-12
+REV-013	7	admaven	confirmed	第三者投稿	実収益	2年間合計31,250ドル	最初の90日1,840ドル、4〜12月11,260ドル、2年目18,150ドル	Pop・Push等を使う複数サイト	https://affmaven.com/admaven-review/	アフィリエイトを含むレビューサイトの自己申告	2026-08-12
+REV-014	7	admaven	not_found	調査記録	公開例なし	独立した2件目の金額・母数付き実例を確認できず	レビュー・公式事例を調査	海外サイト	https://ad-maven.com/blog-posts/how-a-movie-fan-turned-passion-into-profit-with-admaven	公式事例は増加を述べるが実額非公開	2026-08-12
+REV-015	8	infolinks	not_found	調査記録	公開例なし	金額とトラフィックを併記した公開実例を確認できず	第三者記事・公式事例を調査	コンテキスト広告	https://sites0001.infolinks.com/support/earnings/how-do-i-view-my-infolinks-earnings	公式は確認方法のみ	2026-08-12
+REV-016	8	infolinks	not_found	調査記録	公開例なし	2件目の検証可能な実収益例も確認できず	検索調査	コンテキスト広告	https://sites0001.infolinks.com/support/general	収益はアカウント内のみで公開例が乏しい	2026-08-12
+REV-017	9	adcash	confirmed	運営会社事例	実収益	数か月で5万ドル超、ピーク月1.1万ドル超	広告表示約2.5億回	LATAMスポーツサイト・Pop-under	https://adcash.com/knowledge/how-a-latam-sports-publisher-earned-50k-on-pop-under/	運営会社掲載の大型成功事例	2026-08-12
+REV-018	9	adcash	confirmed	運営会社事例	実収益	日平均680ユーロから一部期間1,200ユーロへ増加	2021年1〜12月	スポーツサイト・複数地域	https://adcash.com/knowledge/case-study-autotag-an-absolute-game-changer-in-monetization/	運営会社掲載事例。広告形式変更前後の比較	2026-08-12
+REV-019	10	hilltopads	confirmed	運営会社事例	実収益	累計343,000ドル	期間・表示数詳細はリンク先事例	動画系ニッチサイト	https://www.reddit.com/r/u_hilltopads/comments/1lrimwy	運営会社自身による販促投稿	2026-08-12
+REV-020	10	hilltopads	confirmed	運営会社事例	実収益	累計300,000ドル	2024年3月以降	日本の漫画関連サイト	https://www.reddit.com/r/u_hilltopads/comments/1liifb1	運営会社自身による販促投稿	2026-08-12
+REV-021	11	popads	confirmed	公式説明	CPC・CPM	米国ユニーク訪問1,000件あたり平均4ドル以上との公式説明	1,000ユニーク訪問	米国トラフィック・Popunder	https://www.popads.net/publishers.html	個別媒体の実績ではなく運営会社が示す平均値	2026-08-12
+REV-022	11	popads	not_found	調査記録	公開例なし	金額・期間・トラフィックを備えた第三者実例を確認できず	第三者レビューを調査	Popunder	https://www.popads.net/publishers.html	公式平均以外の検証可能な例が不足	2026-08-12
+REV-023	12	clickadu	not_found	調査記録	公開例なし	Publisher側の金額付き実収益例を確認できず	公式事例・第三者投稿を調査	海外Popunder等	https://faq.clickadu.com/en/articles/9496939-how-do-i-know-how-much-i-can-earn-with-clickadu	広告主のROI事例はPublisher収益と異なるため除外	2026-08-12
+REV-024	12	clickadu	not_found	調査記録	公開例なし	2件目のPublisher実収益例も確認できず	公式ソーシャル収益化事例を調査	海外ソーシャルトラフィック	https://www.clickadu.com/blog/monetize-social-media-traffic	日収が期待以上との記載のみで金額非公開	2026-08-12
+REV-025	13	bidvertiser	not_found	調査記録	公開例なし	金額と母数が確認できるPublisher実例を確認できず	レビュー・公式FAQを調査	CPC・CPM・CPA	https://zendesk.bidvertiser.com/hc/en-us/articles/213569789-Why-haven-t-I-generated-any-revenue	公式も固定収益額はないと説明	2026-08-12
+REV-026	13	bidvertiser	not_found	調査記録	公開例なし	2件目の検証可能な実収益例を確認できず	レビューサイト調査	Web媒体	https://www.g2.com/products/bidvertiser/reviews	安定収益という定性評価のみ	2026-08-12
+REV-027	14	monetag	confirmed	運営会社事例	実収益	2,773.93ドル、合算CPM 0.58ドル	ピーク日・広告表示4,761,895回	試験結果サイト・Popunder等	https://monetag.com/blog/leading-exam-results-site-case-study/	運営会社掲載のトラフィックスパイク成功例	2026-08-12
+REV-028	14	monetag	confirmed	運営会社事例	実収益	累計7,449ドル、平均CPM 4.5ドル	広告表示1,652,333回	X流入のライフスタイル媒体・SmartLink中心	https://monetag.com/blog/twitter-7k-case-study/	運営会社掲載事例	2026-08-12
+REV-029	15	exoclick	confirmed	運営会社事例	実収益	月4,524ドルから6,520ドルへ増加	導入前後各1か月	8サイト運営者の最大サイト・Popunder	https://www.exoclick.com/case-study-how-3-publishers-increased-earnings-with-our-in-line-popunder-code/	運営会社掲載事例	2026-08-12
+REV-030	15	exoclick	confirmed	運営会社事例	実収益	月5,170ドルから11,254ドルへ増加	日次表示20万から33万へ	モバイルPopunder枠	https://www.exoclick.com/case-study-how-3-publishers-increased-earnings-with-our-in-line-popunder-code/	運営会社掲載事例	2026-08-12
+REV-031	16	revcontent	confirmed	運営会社事例	収益増加率	導入直後に大幅な収益増加との事例	数値詳細非公開	Minute Media	https://cdn.featuredcustomers.com/CustomerCaseStudy.document/revcontent1_minute-media_764466.pdf	具体的金額・率は公開資料の抽出範囲で確認できない	2026-08-12
+REV-032	16	revcontent	not_found	調査記録	公開例なし	金額付きの2件目を確認できず	導入事例を調査	大手メディア	https://cdn.featuredcustomers.com/CustomerCaseStudy.document/revcontent1_barstool-sports_764449.pdf	ブランドセーフティ中心で収益額非公開	2026-08-12
+REV-033	17	mgid	not_found	調査記録	公開例なし	Publisherの金額・RPM付き公開例を確認できず	公式・第三者事例を調査	Native広告	https://site.geoedge.com/downloads/documents/MGID_Case_Study.pdf	掲載資料はMGID側の品質改善事例でPublisher収益非公開	2026-08-12
+REV-034	17	mgid	not_found	調査記録	公開例なし	2件目の検証可能な収益例を確認できず	検索調査	Native広告	https://www.mgid.com/publishers	公式ページは収益最大化の説明のみ	2026-08-12
+REV-035	18	journey-by-mediavine	confirmed	第三者投稿	実収益	最初の10日で110.27ドル、平均RPM 8.81ドル	日次約900〜2,000セッション	Finance・Tech、Tier 1流入80%	https://www.reddit.com/r/Blogging/comments/1hevjch	自己申告投稿	2026-08-12
+REV-036	18	journey-by-mediavine	confirmed	第三者投稿	実収益	1か月71.31ドル、平均RPM約9.50ドル	Pageview 8,791	ブログ	https://www.reddit.com/r/Blogging/comments/1iknhdi	自己申告投稿	2026-08-12
+REV-037	19	monumetric	confirmed	第三者調査	RPM・EPMV	調査回答者の平均RPM 7.94ドル	2026年ブログ収益調査	複数ブログ回答者	https://www.productiveblogging.com/how-much-do-bloggers-earn/	サンプル数はサービス別に限定される	2026-08-12
+REV-038	19	monumetric	confirmed	第三者投稿	実収益	月間11万アクセスで月300ドル未満との投稿	月間約110,000アクセス	YMYL・Tier 1中心	https://www.reddit.com/r/Blogging/comments/1atcvi1	自己申告。収益の正確な内訳は不明	2026-08-12
+REV-039	20	newor-media	confirmed	運営会社事例	収益増加率	Ezoicから切替後に収益増、休日は特に好調	率・金額非公開	旅行・金融ニッチサイト	https://newormedia.com/blog/maximizing-revenue-case-study/	運営会社掲載で具体的金額なし	2026-08-12
+REV-040	20	newor-media	not_found	調査記録	公開例なし	金額付きの2件目を確認できず	第三者記事・公式事例を調査	Managed広告	https://newormedia.com/blog/maximizing-revenue-case-study/	公開情報の透明性が低い	2026-08-12
+REV-041	21	raptive	confirmed	第三者調査	RPM・EPMV	調査回答者の平均RPM 42.43ドル	2026年ブログ収益調査	複数ブログ回答者	https://www.productiveblogging.com/how-much-do-bloggers-earn/	回答者構成に左右される	2026-08-12
+REV-042	21	raptive	confirmed	運営会社事例	RPM・EPMV	切替前RPM 17.26ドルから導入後に上昇	導入後5週間の比較	Creator A	https://raptive.com/blog/proven-rpm-lifts/	導入後の絶対RPMはグラフ依存。運営会社分析	2026-08-12
+REV-043	22	ezoic	confirmed	運営会社事例	実収益	月7,764ドルから27,005ドルへ増加	月間約117万から113万セッション	歴史系サイト	https://www.ezoic.com/case-studies/adsense-to-premium-demand-case-study	運営会社掲載事例	2026-08-12
+REV-044	22	ezoic	confirmed	運営会社事例	実収益	月730.75ドルから1,370.25ドルへ増加	比較期間はレポート参照	Publisher performance report	https://www.ezoic.com/wp-content/uploads/2020/02/2020-publisher-performance-report-1.pdf	運営会社作成レポート	2026-08-12
+REV-045	23	setupad	confirmed	運営会社事例	収益増加率	広告収益497%増	導入前後比較	Sin0nime.com	https://setupad.com/blog/category/case-studies/	運営会社掲載事例。絶対額非公開	2026-08-12
+REV-046	23	setupad	confirmed	運営会社事例	収益増加率	広告数を減らしながら収益144%増	導入前後比較	Easilyfixit.com	https://setupad.com/blog/category/case-studies/	運営会社掲載事例。絶対額非公開	2026-08-12
+REV-047	24	mediavine-official	confirmed	第三者調査	RPM・EPMV	調査回答者の平均RPM 41.94ドル	2026年ブログ収益調査	複数ブログ回答者	https://www.productiveblogging.com/how-much-do-bloggers-earn/	回答者構成に左右される	2026-08-12
+REV-048	24	mediavine-official	confirmed	第三者投稿	実収益	月約2,000ドル	月次・PV詳細は資料参照	旅行ブログ	https://www.goatsontheroad.com/wp-content/uploads/2018/03/How-When-To-Monetize-Your-Travel-Blog.pdf	古い事例。現在の単価とは比較不可	2026-08-12
+REV-049	25	publift	confirmed	運営会社事例	収益増加率	平均月間収益313%増、月間Page RPM 62%増	導入前後比較	Bustimes.org	https://www.publift.com/case-studies?filter=News	運営会社掲載事例。絶対額非公開	2026-08-12
+REV-050	25	publift	confirmed	運営会社事例	収益増加率	前年比収益66%増、RPM 88%増	前年比較	Trader Interactive	https://www.publift.com/case-studies?filter=News	運営会社掲載事例。絶対額非公開	2026-08-12
+REV-051	26	microad-compass	not_found	調査記録	公開例なし	金額・RPM・増加率付きのPublisher事例を確認できず	公式資料・第三者記事を調査	国内SSP	https://www.microad.co.jp/services/adplatform/microad-compass/	公式は収益最大化機能のみ説明	2026-08-12
+REV-052	26	microad-compass	not_found	調査記録	公開例なし	2件目の公開実例も確認できず	ホワイトペーパーを調査	国内SSP	https://www.microad.co.jp/services/whitepaper/MicroAd_WP_COMPASS.pdf	導入説明中心で個別収益非公開	2026-08-12
+REV-053	27	logly-ads-context	not_found	調査記録	公開例なし	Publisherの金額・RPM付き実例を確認できず	公式事例・第三者記事を調査	国内Native広告	https://lift.logly.co.jp/	公式は広告主側の実績中心	2026-08-12
+REV-054	27	logly-ads-context	not_found	調査記録	公開例なし	2件目の公開実例も確認できず	料金・事例ページを調査	国内Native広告	https://lift.logly.co.jp/price/	媒体収益の具体値は非公開	2026-08-12
+REV-055	28	fluct-ssp	not_found	調査記録	公開例なし	金額・RPM・増加率付きの公開事例を確認できず	公式導入効果・第三者記事を調査	国内SSP	https://corp.fluct.jp/service/ssp/	公式は収益向上の仕組みのみ説明	2026-08-12
+REV-056	28	fluct-ssp	not_found	調査記録	公開例なし	2件目の検証可能な収益例も確認できず	検索調査	国内SSP	https://corp.fluct.jp/service/ssp/	法人媒体の契約値は一般公開されていない	2026-08-12
+REV-057	29	geniee-ssp	not_found	調査記録	公開例なし	Publisherの実収益額・RPM付き事例を確認できず	公式事例・ニュースを調査	国内SSP	https://geniee.co.jp/products/ssp/	公式は収益最大化機能のみ説明	2026-08-12
+REV-058	29	geniee-ssp	not_found	調査記録	公開例なし	2件目の検証可能な収益例も確認できず	アプリ導入事例を調査	国内アプリSSP	https://geniee.co.jp/news/20170426/	導入件数はあるが収益数値非公開	2026-08-12
+REV-059	30	freestar	confirmed	運営会社事例	収益増加率	AdSenseから切替後、広告収益698%増	導入前後比較	DeepAI	https://freestar.com/case-studies/	運営会社掲載事例。絶対額非公開	2026-08-12
+REV-060	30	freestar	confirmed	運営会社事例	収益増加率	月間RPM 3倍、2018年以降の月間収益10倍	長期比較	Time.is	https://freestar.com/case-study/time-is/	運営会社掲載事例。絶対額非公開	2026-08-12

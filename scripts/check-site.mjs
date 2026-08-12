@@ -44,6 +44,11 @@ const categoryPages = html.filter(file => /^categories\/[^/]+\/index\.html$/.tes
 if (servicePages.length !== 30) failures.push(`expected 30 service pages, got ${servicePages.length}`);
 if (categoryPages.length < 1) failures.push('no category pages generated');
 
+const homeSource = await readFile(join(root, 'index.html'), 'utf8');
+const homeServiceOrder = [...homeSource.matchAll(new RegExp(`href="${basePath}/services/([^/]+)/"`, 'g'))].map(match => match[1]);
+if (homeServiceOrder[0] !== 'imobile-ad-network') failures.push(`expected i-mobile first, got ${homeServiceOrder[0]}`);
+if (homeServiceOrder.indexOf('ninja-admax') !== 28) failures.push('expected Ninja AdMax at rank 29');
+
 for (const file of servicePages) {
   const source = await readFile(file, 'utf8');
   if (!source.includes('data-related-genres')) failures.push(`${file}: related genres missing`);
@@ -65,14 +70,9 @@ for (const file of categoryPages) {
   }
 }
 
-for (const slug of ['ninja-admax','imobile-ad-network','zucks-ad-network','adsterra','adstir']) {
-  const source = await readFile(join(root, 'services', slug, 'index.html'), 'utf8');
-  if (!source.includes('data-editorial-review')) failures.push(`${slug}: researched review missing`);
-  for (const heading of ['利用者が挙げた良い点', '利用者が挙げた注意点', '口コミから見る、こんな人におすすめ']) {
-    if (!source.includes(`<h2>${heading}</h2>`)) failures.push(`${slug}: ${heading} missing`);
-  }
-  const reviewLinks = [...source.matchAll(/>体験記事を確認<\/a>/g)];
-  if (reviewLinks.length < 6) failures.push(`${slug}: expected at least 6 review source links`);
+for (const file of servicePages) {
+  const source = await readFile(file, 'utf8');
+  if (!source.includes('data-revenue-examples')) failures.push(`${file}: revenue examples section missing`);
 }
 
 if (failures.length) {

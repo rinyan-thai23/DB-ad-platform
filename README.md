@@ -42,7 +42,7 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 そのため、アフィリエイトリンクの追加・変更はTSVだけで完結します。生成HTMLのCTAには `rel="sponsored nofollow noopener"` が付きます。調査出典は `source_*_url` 列で管理します。
 
-個別ページの口コミ欄は、TSVの `pros`・`cons`・`recommended_for` から生成します。`pros` と `cons` は第三者の体験記事を要約した複数項目で、各項目の出典を `pros_source_urls`・`cons_source_urls` に保存します。現在は初心者向け順位1〜5位を調査・入力済みです。
+個別ページの実収益欄は、別表 `ad_network_revenue_examples_2026-08-12.tsv` から生成します。金額、RPM、CPC、増加率を同じ「収益例」に混同せず、指標種別・期間・トラフィック条件・出典種別とともに表示します。
 
 ## 生成ページ
 
@@ -64,6 +64,8 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 - `tools/`: DB整備用スクリプト
 - `ad_network_database_2026-08-11.tsv`: 公開データ本体
 - `ad_network_schema_2026-08-11.tsv`: 公開スキーマ
+- `ad_network_revenue_examples_2026-08-12.tsv`: サービス別の実収益・RPM・CPC・増加率と調査記録
+- `ad_network_revenue_examples_schema_2026-08-12.tsv`: 実収益例テーブルのスキーマ
 
 アフィリエイトURL、調査ソース、生成ロジックは公開Repositoryにそのまま含める方針です。AIエージェントも本READMEの構成・更新手順に従ってください。
 
