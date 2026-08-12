@@ -21,8 +21,8 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
-  $domainNotRequiredIds = @('4', '6', '13')
-  $domainRequiredIds = @('14', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '28', '29', '30')
+$domainNotRequiredIds = @('4', '13')
+$domainRequiredIds = @('6', '14', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '28', '29', '30')
   if ($row.id -in $domainNotRequiredIds) {
     $row.custom_domain_requirement = '必須ではない'
   } elseif ($row.id -in $domainRequiredIds) {
@@ -40,21 +40,9 @@ $jpFitMap = @{
   '実質不向き（日本国内流入中心）' = '実質不向き'
 }
 
-$hostingMap = @{
-  '公式要件＋実務推定' = '混在'
-  '公式の個別ホスト保証なし' = '技術推定'
-  'Blogger=公式 / その他=技術推定' = '混在'
-  '公式トラフィック条件＋実務推定' = '混在'
-  '公式品質要件＋実務推定' = '混在'
-  '公式明記（free domain一般）' = '公式明記'
-}
-
 foreach ($row in $rows) {
   if ($jpFitMap.ContainsKey($row.japanese_site_fit)) {
     $row.japanese_site_fit = $jpFitMap[$row.japanese_site_fit]
-  }
-  if ($hostingMap.ContainsKey($row.hosting_evidence_level)) {
-    $row.hosting_evidence_level = $hostingMap[$row.hosting_evidence_level]
   }
   if ($row.bank_transfer -notin @('Yes', 'No', 'Conditional', 'Unknown')) {
     $row.bank_transfer = 'Unknown'
@@ -66,22 +54,6 @@ foreach ($row in $rows) {
   }
   if ($row.change_risk -eq 'Low-Medium') {
     $row.change_risk = 'Medium'
-  }
-  foreach ($hostColumn in @('blogspot_free_url', 'wordpress_com_free_url', 'github_pages_free_url', 'vercel_free_subdomain', 'cloudflare_pages_free_subdomain')) {
-    $value = $row.$hostColumn
-    if ($value -like '公式OK*') {
-      $row.$hostColumn = '公式OK'
-    } elseif ($value -like '公式NG*') {
-      $row.$hostColumn = '実質NG'
-    } elseif ($value -like '条件付き*') {
-      $row.$hostColumn = '条件付き'
-    } elseif ($value -like '技術推定OK*') {
-      $row.$hostColumn = '技術推定OK'
-    } elseif ($value -like '実質NG*' -or $value -like '実質不向き*') {
-      $row.$hostColumn = '実質NG'
-    } elseif ($value -eq '個別審査' -or $value -like '通常は独自ドメイン推奨*') {
-      $row.$hostColumn = '条件付き'
-    }
   }
 }
 
@@ -108,6 +80,23 @@ $exoClick.payout_currency = 'EUR/USD'
 $exoClick.source_payment_url = 'https://docs.exoclick.com/publishers/payments/payment-options-timescales'
 $exoClick.confidence = 'High'
 $exoClick.notes = '公式Payments文書でWire最低200 EUR/USD、週次Net7または月次Net20を確認。日本の銀行での受取可否・中継銀行手数料は口座ごとに確認。'
+
+foreach ($row in $rows) {
+  if ($row.id -eq '6') {
+    $row.recommendation_rank_jp_beginner = '30'
+    $row.beginner_tier = 'C'
+    $row.zero_to_one_score_1_5 = '1'
+    $row.growth_stage = '比較基準 / AdSense審査通過後'
+    $row.custom_domain_requirement = '必須'
+    $row.beginner_recommendation = '本DBでは非推奨の比較基準。通常サイト申請は独自ドメイン前提で、審査不承認時に修正点を絞り込みにくい。AdSenseに通らない人は上位の代替候補を比較。'
+    $row.source_requirements_url = 'https://support.google.com/adsense/answer/2784438?hl=ja'
+    $row.notes = '通常サイト申請は標準ドメインURLを入力。Blogger等Host Partnerは別申請経路のため、このDBの独自ドメイン判定から除外。Googleは承認率を公表していないため、非公式な却下率は採用しない。'
+  } elseif ([int]$row.id -gt 6) {
+    $row.recommendation_rank_jp_beginner = [string]([int]$row.id - 1)
+  } else {
+    $row.recommendation_rank_jp_beginner = $row.id
+  }
+}
 
 $removedDomainColumns = @(
   'free_subdomain_policy',

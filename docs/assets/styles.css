@@ -139,6 +139,9 @@ h1 { margin:0; font-size:clamp(42px,7vw,82px); }
 .cta:hover { background:var(--green-dark); }
 .disclosure { color:var(--muted); font-size:12px; }
 .notice { padding:16px; border-left:4px solid var(--amber); background:#fff1dc; border-radius:0 12px 12px 0; }
+.warning-panel { border-color:#e2b36f; background:#fff1dc; }
+.warning-panel .eyebrow { color:#9a5a08; }
+.warning-panel .text-link { display:inline-block; margin-top:8px; }
 .category-context { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr); gap:28px; margin-bottom:48px; padding:28px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); }
 .category-context h2 { margin:0 0 12px; font-size:30px; }
 .category-context p { color:var(--muted); }
