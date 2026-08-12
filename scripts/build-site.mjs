@@ -6,9 +6,9 @@ const root = process.cwd();
 const dist = join(root, 'docs');
 const dataFile = join(root, 'ad_network_database_2026-08-11.tsv');
 const revenueFile = join(root, 'ad_network_revenue_examples_2026-08-12.tsv');
-const siteUrl = (process.env.SITE_URL || 'https://example.com').replace(/\/$/, '');
-const basePath = (process.env.BASE_PATH ?? '/DB-ad-platform').replace(/\/$/, '');
-const generatedAt = '2026-08-11';
+const siteUrl = (process.env.SITE_URL || 'https://db-ad-platform.pages.dev').replace(/\/$/, '');
+const basePath = (process.env.BASE_PATH ?? '').replace(/\/$/, '');
+const generatedAt = '2026-08-12';
 const assetVersion = createHash('sha256').update(await readFile(join(root, 'src', 'styles.css'))).update(await readFile(join(root, 'src', 'app.js'))).digest('hex').slice(0, 10);
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -66,9 +66,9 @@ function layout({title, description, path='/', body, schema='', robots='index,fo
 <meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(canonical(path))}">
 ${schema ? `<script type="application/ld+json">${schema}</script>` : ''}
 </head><body><a class="skip" href="#main">本文へ移動</a>
-<header class="site-header"><div class="wrap header-inner"><a class="brand" href="${href('/')}"><span class="brand-mark">AD</span><span>広告DB 日本版</span></a><nav class="nav" aria-label="メインナビ"><a href="${href('/#database')}">広告を探す</a><a href="${href('/categories/')}">カテゴリ</a><a href="${href('/guide/')}">選び方</a><a href="${href('/about/')}">調査方針</a></nav></div></header>
+<header class="site-header"><div class="wrap header-inner"><a class="brand" href="${href('/')}"><span class="brand-mark">AD</span><span>広告DB 日本版</span></a><nav class="nav" aria-label="メインナビ"><a href="${href('/#database')}">広告を探す</a><a href="${href('/categories/')}">カテゴリ</a><a href="${href('/articles/cloudflare-pages-monetization/')}">公開ガイド</a><a href="${href('/guide/')}">選び方</a><a href="${href('/about/')}">調査方針</a></nav></div></header>
 <main id="main">${body}</main>
-<footer class="site-footer"><div class="wrap footer-inner"><div><strong>広告DB 日本版</strong><br>初心者が条件から広告サービスを比較するための調査データベース。<br>最終確認日: ${generatedAt}</div><div class="footer-links"><a href="${href('/about/')}">運営・調査方針</a><a href="${href('/guide/')}">広告の選び方</a><a href="${href('/categories/')}">カテゴリ一覧</a></div></div></footer>
+<footer class="site-footer"><div class="wrap footer-inner"><div><strong>広告DB 日本版</strong><br>初心者が条件から広告サービスを比較するための調査データベース。<br>最終確認日: ${generatedAt}</div><div class="footer-links"><a href="${href('/articles/cloudflare-pages-monetization/')}">Cloudflare Pages収益化ガイド</a><a href="${href('/about/')}">運営・調査方針</a><a href="${href('/guide/')}">広告の選び方</a><a href="${href('/categories/')}">カテゴリ一覧</a></div></div></footer>
 <script src="${href('/assets/app.js')}?v=${assetVersion}" defer></script></body></html>`;
 }
 
@@ -107,6 +107,7 @@ function homePage() {
   const itemList = JSON.stringify({'@context':'https://schema.org','@type':'ItemList',name:'広告プラットフォーム比較',numberOfItems:rows.length,itemListElement:rows.map((r,i)=>({'@type':'ListItem',position:i+1,url:canonical(`/services/${r.slug}/`),name:r.service_name}))});
   const body = `<section class="hero"><div class="wrap hero-grid"><div><p class="eyebrow">AdSenseの審査で止まった人へ</p><h1>広告を、単価ではなく<br><em>始めやすさ</em>で選ぶ。</h1><p class="lead">AdSenseに通らなくても、収益化の選択肢はあります。日本語サイト、独自ドメイン、日本の銀行口座など、今の条件から代替サービスを絞り込みます。</p></div><aside class="hero-panel"><div class="big-number">30</div><div class="metric-label">広告サービスを同一基準で比較</div><p class="metric-sub">50以上の調査項目／公式情報と推定を分離／毎月更新を想定</p></aside></div></section>
   <section class="section"><div class="wrap"><div class="section-head"><div><p class="eyebrow">よく使われる条件</p><h2>条件から近道する</h2></div><p>よく使う選別条件は、検索エンジンから直接たどれる静的カテゴリページにもしています。</p></div><div class="category-grid">${featuredCategories.map(c=>`<a class="category-tile" href="${href(`/categories/${c.slug}/`)}"><strong>${esc(c.title)}</strong><span>${esc(c.short)} →</span></a>`).join('')}</div></div></section>
+  <section class="section"><div class="wrap"><a class="article-callout" href="${href('/articles/cloudflare-pages-monetization/')}"><div><p class="eyebrow">AIで作ったサイトを公開する</p><h2>Cloudflare Pagesの無料URLから収益化を始める方法</h2><p>複数のツールを1サイトにまとめ、無料公開の段階と独自ドメイン取得後で広告サービスをどう選ぶかを整理しました。</p></div><strong>公開ガイドを読む →</strong></a></div></section>
   <section class="section" id="database"><div class="wrap"><div class="section-head"><div><p class="eyebrow">広告サービス一覧</p><h2>全サービスを比較</h2></div><p>「技術的に貼れる」と「審査で承認される」は別です。各詳細ページで根拠レベルも確認してください。</p></div>${toolbar()}<div class="cards">${rows.map(card).join('')}</div></div></section>`;
   return layout({title:'広告プラットフォーム比較DB｜日本語サイト初心者向け',description:'日本語サイトの広告サービス30社を、初心者適性、最低PV、日本の銀行振込、独自ドメイン要件で比較。',body,schema:itemList});
 }
@@ -165,6 +166,34 @@ function infoPage(kind) {
   return layout({title:`${title}｜広告DB`,description:guide?'日本語サイト初心者が広告サービスを選ぶときの審査、出金、読みやすさの確認ポイント。':'広告プラットフォームDBの調査方法、評価基準、更新方針。',path:`/${kind}/`,body});
 }
 
+function cloudflareMonetizationArticle() {
+  const pagePath = '/articles/cloudflare-pages-monetization/';
+  const title = 'AIで作ったサイトをCloudflare Pagesで無料公開・収益化する方法';
+  const description = 'GitHubからCloudflare Pagesへ複数の静的ツールを無料公開し、無料URL段階から独自ドメイン取得後まで広告・アフィリエイトで収益化する現実的な手順。';
+  const schema = JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'Article',headline:title,description,datePublished:'2026-08-12',dateModified:'2026-08-12',mainEntityOfPage:canonical(pagePath),author:{'@type':'Organization',name:'広告DB 日本版'},publisher:{'@type':'Organization',name:'広告DB 日本版'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'トップ',item:canonical('/')},{'@type':'ListItem',position:2,name:'公開ガイド',item:canonical(pagePath)}]}]});
+  const body = `<div class="wrap breadcrumb"><a href="${href('/')}">トップ</a> / 公開ガイド</div>
+  <article class="article-page"><header class="page-intro"><div class="wrap prose"><p class="eyebrow">AI制作 → GitHub → 無料公開</p><h1>${title}</h1><p class="lead">最初から独自ドメインやレンタルサーバーを契約せず、1つのサイトに複数ツールをまとめて需要を検証する方法です。広告コードを設置できることと、広告会社の審査に通ることは分けて考えます。</p><div class="article-meta">公開・更新: 2026年8月12日</div></div></header>
+  <div class="wrap article-layout"><div class="prose article-body">
+  <div class="article-verdict"><p class="eyebrow">先に結論</p><h2>無料段階はCloudflare Pages、伸びたら独自ドメイン</h2><p><strong>GitHub → Cloudflare Pages → pages.dev</strong>で公開し、初期はアフィリエイトや紹介リンクを中心に検証します。アクセスと利用実績が育った段階で独自ドメインを接続し、このDBから表示広告の候補を選ぶ流れが、費用と審査リスクを抑えやすい方法です。</p></div>
+  <h2>複数ツールは1つのサイトにまとめる</h2><pre><code>example.pages.dev/
+├─ image-resizer/
+├─ character-counter/
+├─ json-formatter/
+├─ invoice-generator/
+└─ guides/</code></pre><p>小さなサイトを大量に分けるより、説明記事、FAQ、運営者情報、プライバシーポリシーを1つのサイトに蓄積できます。検索評価や被リンクも分散せず、将来はサイト全体を1つの独自ドメインへ移せます。</p>
+  <h2>Cloudflare Pagesを使う理由</h2><ul><li>GitHubリポジトリと連携し、push後に自動公開できる</li><li>静的HTML・CSS・JavaScriptをそのまま配信できる</li><li><code>pages.dev</code>の無料URLとHTTPSが付く</li><li>広告タグ、アクセス解析、<code>ads.txt</code>を配置できる</li><li>Freeプランは1アカウント100プロジェクト、月500ビルド、1プロジェクト20,000ファイルまで</li><li>独自ドメインを後から追加できる</li></ul><p>ただし、100プロジェクト作れることと、100サイトへ分散することが有利であることは同じではありません。収益化目的なら、関連ツールをテーマごとにまとめるほうが現実的です。</p>
+  <h2>無料URLの段階で行うこと</h2><ol><li>各ツールに固有URLと静的HTMLを用意する</li><li>使い方、入力例、計算根拠、制限、FAQを記載する</li><li>運営者情報、問い合わせ先、利用規約、プライバシーポリシーを置く</li><li>関連サービスのアフィリエイトリンクや紹介リンクを掲載する</li><li>検索流入と実際の利用状況を確認する</li><li>表示広告を試す場合は、DBで「独自ドメイン必須ではない」サービスを優先して個別確認する</li></ol>
+  <div class="notice"><strong>重要:</strong> <code>pages.dev</code>へ広告JavaScriptを設置できても、広告会社がそのサイトを承認するとは限りません。無料URL、コンテンツ量、独自性、サイト所有権、訪問者地域は別々に審査されます。</div>
+  <h2>独自ドメインを取得するタイミング</h2><p>検索から継続的に訪問者が来る、繰り返し使われるツールがある、紹介リンクのクリックや成果が出る、または広告審査を本格的に受けたい段階が目安です。Cloudflare Pagesは後から独自ドメインを接続できるため、公開基盤を作り直す必要はありません。</p>
+  <h2>独自ドメイン取得後にこのDBを使う</h2><ol><li><a href="${href('/categories/adsense-alternatives/')}">AdSense以外の候補</a>を見る</li><li><a href="${href('/categories/custom-domain-required/')}">独自ドメイン必須</a>を含めて選択肢を広げる</li><li>媒体の推奨言語と、収益化しやすい訪問者地域を確認する</li><li>新しいサイトごとの審査、本人確認、税務手続きを確認する</li><li>最低支払額と<a href="${href('/categories/japan-bank/')}">日本の銀行への振込</a>を確認する</li><li>個別ページの実収益例と出典を確認する</li></ol><p><a class="cta inline-cta" href="${href('/#database')}">広告サービスを比較する</a></p>
+  <h2>掲載候補になりやすいサイト</h2><ul><li>ツールだけでなく、目的と使い方が説明されている</li><li>結果の意味や計算根拠が分かる</li><li>操作ボタンと広告が明確に区別されている</li><li>同じテンプレートの薄いページを大量生成していない</li><li>スマートフォンでも安全に操作できる</li><li>著作権、個人情報、アップロードファイルの扱いが明記されている</li></ul>
+  <h2>確認が必要なサイト</h2><ul><li>入力欄と実行ボタンしかない単一ページ</li><li>ブラウザ上で内容が生成され、初期HTMLに説明がほとんどないSPA</li><li>AI生成文を置いただけで独自の検証や情報がない</li><li>画像・PDF・個人情報を送信するが保存方針がない</li><li>広告をダウンロードボタンやツール操作に見せる配置</li><li>無料サブドメインを広告会社が受け付けるか確認できない</li></ul>
+  <h2>GitHub Pagesを商用公開先にしない</h2><p>GitHub Pagesはソースコード、ドキュメント、個人ページの公開には便利ですが、オンラインビジネスや商用SaaSを運営する無料ホスティングとしての利用には公式上の制限があります。本記事の流れでは、GitHubはソースコードの保管と更新に使い、公開先はCloudflare Pagesとします。</p>
+  <h2>参考にした公式情報</h2><ul class="sources"><li><a href="https://developers.cloudflare.com/pages/" rel="nofollow noopener" target="_blank">Cloudflare Pages公式ドキュメント</a></li><li><a href="https://developers.cloudflare.com/pages/platform/limits/" rel="nofollow noopener" target="_blank">Cloudflare PagesのFreeプラン制限</a></li><li><a href="https://developers.cloudflare.com/pages/configuration/custom-domains/" rel="nofollow noopener" target="_blank">独自ドメインの接続方法</a></li><li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="nofollow noopener" target="_blank">GitHub Pagesの利用制限</a></li><li><a href="https://support.google.com/adsense/answer/12131223?hl=ja" rel="nofollow noopener" target="_blank">Google AdSenseのサイト登録・審査</a></li><li><a href="https://support.google.com/adsense/answer/12171612?hl=ja" rel="nofollow noopener" target="_blank">Google AdSenseのads.txtガイド</a></li></ul>
+  </div><aside class="article-aside"><div class="panel sticky"><p class="eyebrow">このDBで確認</p><h2>サイトの段階に合う広告を探す</h2><p>無料URLの段階では「独自ドメイン必須ではない」、取得後は全サービスを対象に比較できます。</p><a class="cta" href="${href('/categories/no-custom-domain/')}">無料URL段階の候補</a><a class="text-link aside-link" href="${href('/#database')}">全サービスを検索</a></div></aside></div></article>`;
+  return layout({title:`${title}｜広告DB`,description,path:pagePath,body,schema});
+}
+
 async function save(path, content) {
   const target=join(dist,path);
   const normalizedContent = content
@@ -185,9 +214,10 @@ await save(join('categories','index.html'),categoriesPage());
 for (const c of categories) await save(join('categories',c.slug,'index.html'),categoryPage(c));
 await save(join('guide','index.html'),infoPage('guide'));
 await save(join('about','index.html'),infoPage('about'));
+await save(join('articles','cloudflare-pages-monetization','index.html'),cloudflareMonetizationArticle());
 await save('404.html',layout({title:'ページが見つかりません｜広告DB',description:'ページが見つかりません。',robots:'noindex,nofollow',body:`<section class="page-intro"><div class="wrap"><h1>404</h1><p class="lead">ページが見つかりません。<a href="${href('/')}">トップへ戻る</a></p></div></section>`}));
 
-const paths = ['/',...rows.map(r=>`/services/${r.slug}/`),'/categories/',...categories.map(c=>`/categories/${c.slug}/`),'/guide/','/about/'];
+const paths = ['/',...rows.map(r=>`/services/${r.slug}/`),'/categories/',...categories.map(c=>`/categories/${c.slug}/`),'/guide/','/about/','/articles/cloudflare-pages-monetization/'];
 await save('sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(p=>`<url><loc>${esc(canonical(p))}</loc><lastmod>${generatedAt}</lastmod></url>`).join('')}</urlset>`);
 await save('robots.txt',`User-agent: *\nAllow: /\nSitemap: ${canonical('/sitemap.xml')}\n`);
 await save('.nojekyll','');

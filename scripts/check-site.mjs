@@ -2,7 +2,7 @@ import { access, readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 const root = join(process.cwd(), 'docs');
-const basePath = (process.env.BASE_PATH ?? '/DB-ad-platform').replace(/\/$/, '');
+const basePath = (process.env.BASE_PATH ?? '').replace(/\/$/, '');
 
 async function walk(dir) {
   const out = [];
@@ -43,6 +43,8 @@ const categoryPages = html.filter(file => /^categories\/[^/]+\/index\.html$/.tes
 
 if (servicePages.length !== 30) failures.push(`expected 30 service pages, got ${servicePages.length}`);
 if (categoryPages.length < 1) failures.push('no category pages generated');
+const articleFile = join(root, 'articles', 'cloudflare-pages-monetization', 'index.html');
+if (!html.includes(articleFile)) failures.push('Cloudflare Pages monetization article missing');
 
 const homeSource = await readFile(join(root, 'index.html'), 'utf8');
 const homeServiceOrder = [...homeSource.matchAll(new RegExp(`href="${basePath}/services/([^/]+)/"`, 'g'))].map(match => match[1]);
@@ -50,6 +52,7 @@ if (homeServiceOrder[0] !== 'imobile-ad-network') failures.push(`expected i-mobi
 if (homeServiceOrder.indexOf('ninja-admax') !== 28) failures.push('expected Ninja AdMax at rank 29');
 if (!homeSource.includes('<span class="country-flag" aria-hidden="true">🇨🇾</span>海外/キプロス')) failures.push('Adsterra country flag or label missing');
 if (!homeSource.includes('family=Noto+Color+Emoji&display=swap')) failures.push('Noto Color Emoji stylesheet missing');
+if (!homeSource.includes('/articles/cloudflare-pages-monetization/')) failures.push('article link missing from home page');
 if (!homeSource.includes('<span class="tag paypal">PayPal対応</span>')) failures.push('PayPal status tag missing');
 if (homeSource.includes('日本の銀行のみ:') || homeSource.includes('日本の銀行だけで完結')) failures.push('legacy Japan bank wording remains');
 if (homeSource.includes('<div class="card-type">海外アドネットワーク</div>') || homeSource.includes('<div class="card-type">Popunder広告</div>')) failures.push('legacy service type is still shown on cards');

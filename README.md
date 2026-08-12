@@ -12,7 +12,7 @@ npm run check
 npm run serve
 ```
 
-`http://localhost:4173/` で確認できます。生成物はGitHub Pages公開用の `docs/` です。標準の公開パスは `/DB-ad-platform` に設定されています。
+`http://localhost:4173/` で確認できます。生成物はCloudflare Pages公開用の `docs/` です。標準の公開先はRepository名を使った `https://db-ad-platform.pages.dev/` とし、ルートパス `/` で動作します。
 
 本番ビルドでは公開URLを指定してください。
 
@@ -23,8 +23,19 @@ SITE_URL=https://example.jp npm run build
 Repository名を変更する場合や別のProject Siteで配信する場合は `BASE_PATH` も指定します。
 
 ```bash
-SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
+SITE_URL=https://example.pages.dev BASE_PATH= npm run build
 ```
+
+## Cloudflare Pagesへ公開
+
+GitHub RepositoryをCloudflare Pagesへ接続し、次の値を設定します。
+
+- Production branch: `main`
+- Build command: `npm run build`
+- Build output directory: `docs`
+- Root directory: Repository直下
+
+Cloudflareのプロジェクト名が `db-ad-platform` 以外の場合は、環境変数 `SITE_URL` に実際の `https://プロジェクト名.pages.dev` を設定して再デプロイしてください。独自ドメインへ移行した場合も、`SITE_URL`だけを新しいURLへ変更します。
 
 ## データ更新
 
@@ -52,6 +63,7 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 - 30サービスの個別HTML
 - 初心者、日本の銀行、独自ドメイン、PayPal、Payoneer、Wise/Revolut、暗号資産、国際Wire、広告形式などのカテゴリHTML
 - 選び方・調査方針
+- AI制作サイトをCloudflare Pagesで無料公開し、独自ドメイン取得後まで収益化するガイド記事
 - sitemap.xml / robots.txt / 404.html
 
 ## 月次更新
