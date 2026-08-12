@@ -42,7 +42,7 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 そのため、アフィリエイトリンクの追加・変更はTSVだけで完結します。生成HTMLのCTAには `rel="sponsored nofollow noopener"` が付きます。調査出典は `source_*_url` 列で管理します。
 
-個別ページの「メリット」「注意点」「こんな人におすすめ」は、TSVの `pros`・`cons`・`recommended_for` から生成します。現在は初心者向け順位1〜5位を調査・入力済みで、空欄のサービスにはこの欄を表示しません。
+個別ページの口コミ欄は、TSVの `pros`・`cons`・`recommended_for` から生成します。`pros` と `cons` は第三者の体験記事を要約した複数項目で、各項目の出典を `pros_source_urls`・`cons_source_urls` に保存します。現在は初心者向け順位1〜5位を調査・入力済みです。
 
 ## 生成ページ
 

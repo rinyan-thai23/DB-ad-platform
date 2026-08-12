@@ -21,7 +21,7 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
-  foreach ($field in @('pros', 'cons', 'recommended_for')) {
+  foreach ($field in @('pros', 'cons', 'recommended_for', 'pros_source_urls', 'cons_source_urls')) {
     if (-not $row.PSObject.Properties[$field]) {
       $row | Add-Member -NotePropertyName $field -NotePropertyValue ''
     }
@@ -51,6 +51,53 @@ foreach ($row in $rows) {
     $row.cons = $editorialResearch[$row.id].cons
     $row.recommended_for = $editorialResearch[$row.id].recommended_for
     $row.last_verified_date = '2026-08-12'
+  }
+}
+
+# pros / cons は公式仕様からの推測ではなく、第三者の利用記事・レビューの要約を「｜」区切りで保存する。
+$voiceResearch = @{
+  '1' = @{
+    pros = '審査待ちがほぼなく、広告掲載の練習をすぐ始められた｜クリックが発生すれば初心者でも収益発生を体験しやすい｜AdSense合格までの仮運用や、他のアフィリエイトとの併用なら使い道がある'
+    cons = '1年間・約3.7万表示で17円だったという検証例があり、単独での収益化は厳しい｜複数の体験記事で広告単価の低さが指摘されている｜インプレッション報酬はあるものの、大きな収益は期待しにくいという声がある'
+    recommended_for = '高収益を期待する人ではなく、広告掲載を初めて試す人や、AdSense審査中の一時的な広告を探している人。'
+    pros_source_urls = 'https://affiliatesite.biz/column/c02/|https://affiliatesite.biz/column/c02/|https://shingonotsunaten.com/review-ninjaadmax/'
+    cons_source_urls = 'https://shingonotsunaten.com/review-ninjaadmax/|https://affiliatesite.biz/column/c02/|https://techhowto.blog/posts/ad-platforms-review/'
+  }
+  '2' = @{
+    pros = '申込フォームは特に難しいところがなく、PC・スマートフォンの両方を登録できた｜AdSenseを使いにくいジャンルの代替候補として選ばれ、実際に審査通過した例がある｜アプリ広告ではメディエーション対応を良い点として挙げる利用者がいる'
+    cons = 'ある紹介者の運用目安ではクリック単価が2〜8円程度で、アクセス数が必要とされている｜審査基準が分かりにくいという体験者の指摘がある｜PC用とスマートフォン用の登録項目が分かれ、媒体情報の入力項目も多い'
+    recommended_for = 'PC・スマートフォン両方の日本語サイトを運営し、AdSense以外のクリック広告を試したい人。ある程度の記事数やアクセスがあり、媒体情報を準備できる人。'
+    pros_source_urls = 'https://blogshugyounikki.com/archives/596|https://blogshugyounikki.com/archives/596|https://techhowto.blog/posts/ad-platforms-review/'
+    cons_source_urls = 'https://kosuke0001.com/i-mobile-adnetwork/|https://blogshugyounikki.com/archives/596|https://blogshugyounikki.com/archives/596'
+  }
+  '3' = @{
+    pros = '体験者の例では申請翌日に審査を通過し、広告枠承認を含め約3日で配信できた｜審査完了までが短く、導入の速さは良いと評価されている｜アプリ広告ではメディエーション対応が良い点として挙げられている'
+    cons = '月間約30万PVのブログで、クリック単価はほぼ10円前後、インプレッション収益はかなり低いという検証例がある｜同じ体験者は収益面から積極的にはすすめにくいと評価している｜モバイル向け広告が中心で、デスクトップ表示でもアプリ誘導広告などが混ざるとの利用者報告がある'
+    recommended_for = '短期間でモバイル向け広告を試したいサイト・アプリ運営者。高単価を前提にせず、実データを見ながら他社広告と比較できる人。'
+    pros_source_urls = 'https://nobutoblog.com/zucks-ad-network/|https://nobutoblog.com/zucks-ad-network/|https://techhowto.blog/posts/ad-platforms-review/'
+    cons_source_urls = 'https://nobutoblog.com/zucks-ad-network/|https://nobutoblog.com/zucks-ad-network/|https://techhowto.blog/posts/ad-platforms-review/'
+  }
+  '4' = @{
+    pros = '媒体運営者側のレビューで、承認が速く広告形式が豊富だったという声がある｜高いフィル率と定期的な支払いにより、以前の広告網より収益を予測しやすくなったという評価がある｜リアルタイム統計が広告配置の改善に役立ったという利用者評価がある'
+    cons = '広告の侵入性が高く、配置によって直帰率が上がるというレビューがある｜不適切な広告や意図しないリダイレクトを経験したという報告がある｜支払い遅延、アカウント制限、サポート対応への不満もあり、レビューは大きく割れている'
+    recommended_for = '海外向けトラフィックを持ち、広告品質と直帰率を監視しながら形式を限定してテストできる人。英語サポートや支払いトラブル時の確認に対応できる人。'
+    pros_source_urls = 'https://www.techjockey.com/us/reviews/adsterra|https://www.techjockey.com/us/reviews/adsterra|https://www.techjockey.com/us/reviews/adsterra'
+    cons_source_urls = 'https://www.techjockey.com/us/reviews/adsterra|https://www.trustpilot.com/review/adsterra.com|https://www.trustpilot.com/review/adsterra.com'
+  }
+  '5' = @{
+    pros = '広告カテゴリの許可・除外設定が分かりやすいという利用者評価がある｜広告枠や対象ユーザーを細かく設定でき、他のクリック広告よりクリック率が高かったという体験談がある｜AdSenseの代替として使いやすく、実際に継続利用しているという運営者がいる'
+    cons = '体験記事では1クリック1〜3円程度、CPMも厳しく、メイン広告より補助向きと評価されている｜ワイプ広告やインタースティシャル広告は収益性がある反面、サイト体験へのリスクがある｜担当者が付かず、自分で広告枠を設定する必要があるという体験談がある'
+    recommended_for = '広告カテゴリを自分で調整しながら、AdSense以外の補助広告を試したい人。単価よりも設定自由度やクリック率を重視する人。'
+    pros_source_urls = 'https://sadaono.com/article/sidejob/adstir-review|https://sadaono.com/article/sidejob/adstir-review|https://ym-life.com/adstir-passing/'
+    cons_source_urls = 'https://sadaono.com/article/sidejob/adstir-review|https://ym-life.com/adstir-passing/|https://sadaono.com/article/sidejob/adstir-review'
+  }
+}
+
+foreach ($row in $rows) {
+  if ($voiceResearch.ContainsKey($row.id)) {
+    foreach ($field in @('pros', 'cons', 'recommended_for', 'pros_source_urls', 'cons_source_urls')) {
+      $row.$field = $voiceResearch[$row.id].$field
+    }
   }
 }
 
