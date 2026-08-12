@@ -57,6 +57,7 @@ if (homeSource.includes('<div class="card-type">海外アドネットワーク</
 for (const file of servicePages) {
   const source = await readFile(file, 'utf8');
   if (!source.includes('data-related-genres')) failures.push(`${file}: related genres missing`);
+  if (!source.includes('ユーザー登録・確認手続き')) failures.push(`${file}: registration section missing`);
   const links = [...source.matchAll(new RegExp(`href="${basePath}/categories/([^/]+)/"`, 'g'))];
   if (!links.length) failures.push(`${file}: no category membership links`);
 }

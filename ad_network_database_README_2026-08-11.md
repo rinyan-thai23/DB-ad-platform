@@ -6,11 +6,11 @@ Google AdSenseの審査に通らない、または審査で停滞した日本語
 
 ## 収録
 - 30サービス
-- 53カラム
+- 63カラム
 - 国内アドネットワーク、国内SSP、海外セルフサーブ、Native、Managed Programmatic、Enterpriseを同一スキーマで比較
 
 ## データ品質
-- DB本体は30行×58列で、列順は `ad_network_schema_2026-08-11.tsv` と一致
+- DB本体は30行×63列で、列順は `ad_network_schema_2026-08-11.tsv` と一致
 - enum / enum-like列はスキーマの基本値に正規化し、条件の詳細は理由・方式・注記列に保持
 - 実収益例は1サービス対複数行になるため、別表 `ad_network_revenue_examples_2026-08-12.tsv` で管理
 - 運営国、媒体の推奨言語、収益化しやすい訪問者地域、言語・地域による収益差をDB本体で管理
@@ -39,7 +39,7 @@ PayPal/Payoneerを経由せず、日本の銀行口座まで入金できるか�
 - `Unknown`: 公開資料で確認できず
 
 ### 3. Stripe
-Publisher広告収益の支払では、Stripeは主要レールではありません。
+利用者への広告収益の支払では、Stripeは主要レールではありません。
 今回の30社では、Google Payments / 国内振込 / Tipalti / Hyperwallet / PayPal / Payoneer / Wise / SWIFTが中心です。
 Stripe列は「対応が普通ではない」こと自体をDBで可視化する目的で残しています。
 

@@ -23,10 +23,10 @@ bank_transfer	enum-like	Yes / No / Conditional / Unknown	銀行振込という�
 japan_bank_only_complete	enum-like	Yes / Conditional / No / Unknown	PayPal等を使わず日本の銀行口座まで完結できるか
 bank_method	string		国内振込 / Local Bank Transfer / SWIFT / Tipalti eCheck等
 payout_processor	string		Tipalti/Hyperwallet/Google Payments等
-paypal	string		Publisher支払でPayPalを使えるか
+paypal	string		利用者への支払でPayPalを使えるか
 payoneer	string		Payoneer対応
 wise_revolut	string		Wise/Revolut等対応
-stripe_payout	string		StripeをPublisher支払レールとして使えるか。今回調査では主要例ほぼなし
+stripe_payout	string		Stripeを利用者への支払手段として使えるか。今回調査では主要例ほぼなし
 crypto	string		暗号資産払い
 minimum_payout_overall	string		最も低い支払手段も含む最低支払額
 minimum_payout_bank	string		銀行振込を選んだ場合の最低支払額
@@ -57,3 +57,8 @@ publisher_content_languages	enum	日本語 / 日本語中心 / 英語中心 / �
 recommended_audience_geos	string		広告需要を踏まえた主な対象訪問者地域
 language_revenue_note	string		媒体言語・訪問者地域と収益の関係
 source_language_geo_url	url		言語・対象地域・国別収益判断の参照先
+user_registration_regions	string		日本在住・海外在住を含む、利用者登録可能地域と地域条件
+new_user_registration_status	enum-like	オンライン登録受付中 / オンライン申請受付中 / 申請・審査制 / 問い合わせ・審査制	新規利用者登録の受付方法と状態
+new_site_review_process	string		新しいサイトを追加するときの登録・所有権確認・媒体審査
+identity_tax_requirements	string		本人・住所確認および居住国に応じた税務手続き
+source_registration_url	url		利用者登録・サイト審査・本人確認・税務手続きの参照先

@@ -21,7 +21,7 @@ foreach ($row in $rows) {
   if (-not $row.PSObject.Properties['affiliate_url']) {
     $row | Add-Member -NotePropertyName affiliate_url -NotePropertyValue ''
   }
-  foreach ($field in @('operator_country', 'publisher_content_languages', 'recommended_audience_geos', 'language_revenue_note', 'source_language_geo_url')) {
+  foreach ($field in @('operator_country', 'publisher_content_languages', 'recommended_audience_geos', 'language_revenue_note', 'source_language_geo_url', 'user_registration_regions', 'new_user_registration_status', 'new_site_review_process', 'identity_tax_requirements', 'source_registration_url')) {
     if (-not $row.PSObject.Properties[$field]) {
       $row | Add-Member -NotePropertyName $field -NotePropertyValue ''
     }
@@ -78,6 +78,48 @@ foreach ($row in $rows) {
   $row.language_revenue_note = $profile[3]
   $row.source_language_geo_url = $profile[4]
   $row.home_region = if ($profile[0] -eq '日本') { '日本' } else { "海外/$($profile[0])" }
+}
+
+$registrationProfiles = @{
+  '1'=@('日本中心。海外在住者は居住国・契約主体を個別確認','オンライン登録受付中','サイト登録後に広告枠を作成。サイト追加時の確認内容は要確認','登録者・支払先情報が必要。本人確認・税務書類の公開詳細は要確認','https://www.ninja.co.jp/admax/')
+  '2'=@('日本中心。海外在住者は居住国・契約主体を個別確認','オンライン登録受付中','媒体ごとの登録・審査あり','契約者・支払情報が必要。本人確認・税務書類は登録時に確認','https://adpf-info.i-mobile.co.jp/')
+  '3'=@('日本中心。海外在住者は問い合わせ時に確認','問い合わせ・審査制','媒体ごとの審査あり','契約主体・支払情報が必要。必要書類は契約時確認','https://zucks.co.jp/publisher/adnetwork/')
+  '4'=@('日本を含む世界各国。居住国に応じた利用可否を登録時に確認','オンライン登録受付中','ドメイン・広告形式ごとに確認。通常5～10分との公式案内あり','メール確認と支払プロフィールが必要。追加確認・税務情報は居住国と支払方法による','https://adsterra.com/blog/set-up-publishers-dashboard/')
+  '5'=@('日本中心。海外在住者は居住国・契約主体を個別確認','オンライン登録受付中','媒体ごとの登録・審査あり','登録者・支払情報が必要。本人確認・税務書類は要確認','https://ja.ad-stir.com/')
+  '6'=@('日本を含む対応国・地域。海外在住者は実際の居住国で登録','オンライン登録受付中','新しいサイトごとに所有権確認とポリシー審査が必須','本人・住所確認あり。居住地等に応じて税務情報、非米国居住者は通常W-8系フォームが必要','https://support.google.com/adsense/answer/12169212?hl=ja')
+  '7'=@('世界各国。制限地域と利用条件は登録時に確認','オンライン登録受付中','サイト・広告コードごとの確認あり','連絡先・支払情報が必要。本人確認・税務書類の詳細はアカウントで確認','https://webflow.ad-maven.com/publishers')
+  '8'=@('世界各国。海外在住者を含め利用地域は申請時確認','オンライン登録受付中','サイトごとの申請・審査あり','支払プロフィールが必要。本人確認・税務情報は居住国と支払方法による','https://www.infolinks.com/')
+  '9'=@('世界各国。制限地域は登録時に確認','オンライン登録受付中','サイトごとの登録・確認あり','アカウント・支払情報が必要。追加本人確認や税務情報は条件による','https://adcash.com/publishers/')
+  '10'=@('世界各国。制限地域は利用規約・登録画面で確認','オンライン登録受付中','サイト・広告枠ごとの確認あり','支払情報が必要。本人確認・税務書類は居住国と支払方法による','https://hilltopads.com/publishers/')
+  '11'=@('世界各国。居住国の利用可否は登録時に確認','オンライン登録受付中','サイトごとの登録・承認あり','登録者・支払情報が必要。追加確認・税務書類は要確認','https://www.popads.net/publishers.html')
+  '12'=@('世界各国。制限地域は登録時に確認','オンライン登録受付中','サイト・広告枠ごとの確認あり','登録者・支払情報が必要。本人確認・税務情報は条件による','https://www.clickadu.com/publishers')
+  '13'=@('世界各国。無料ドメイン等は条件付き','オンライン登録受付中','サイトごとの登録。無料ドメインは自動承認対象外','支払プロフィールが必要。本人確認・税務書類の公開詳細は要確認','https://www.bidvertiser.com/webmasters/')
+  '14'=@('日本を含む世界各国。ただし公式の除外国・地域あり','オンライン登録受付中','サイトごとの追加と所有権確認が必要','登録者・支払情報が必要。本人確認・税務情報は居住国・支払方法により追加される場合あり','https://help.monetag.com/en/articles/6723848-what-countries-are-available-for-publishers-to-register-from')
+  '15'=@('世界各国。EU等では地域別の確認事項あり','オンライン登録受付中','サイト・広告枠ごとの登録と審査あり','プロフィール確認とTax ID情報が必要。EU・スペインなどはVAT関連の追加確認あり','https://docs.exoclick.com/ja/docs/general/my-profile/')
+  '16'=@('主に英語圏。海外在住者もサイトと訪問者条件により個別審査','申請・審査制','サイトごとの品質・トラフィック審査あり','契約・支払情報と、居住国に応じた税務書類が必要となる場合あり','https://www.revcontent.com/publishers/')
+  '17'=@('世界各国。サイト言語・地域・品質を個別審査','オンライン申請受付中','サイトごとの審査あり','契約者・支払情報が必要。本人確認・税務情報は居住国により確認','https://www.mgid.com/publishers')
+  '18'=@('対応地域の制限より、サイト品質・訪問者地域・セッション条件を重視','オンライン申請受付中','サイトごとの審査。Journeyは公開セッション条件あり','支払設定時に本人・事業情報と居住国に応じた税務情報を確認','https://www.journeymv.com/')
+  '19'=@('主に英語圏サイト向け。海外在住者はサイト条件を満たす場合に申請','申請・審査制','サイトごとのトラフィック・品質審査あり','契約・支払情報、居住国に応じた税務書類が必要となる場合あり','https://www.monumetric.com/')
+  '20'=@('主に米国トラフィックを持つサイト向け。運営者の居住地は個別確認','申請・審査制','サイトごとのトラフィック・品質審査あり','本人・事業・支払情報と税務情報を契約時に確認','https://newormedia.com/')
+  '21'=@('海外在住者を含むInternational creatorsに対応。主な訪問者地域条件あり','申請・審査制','サイトごとの品質・トラフィック審査あり','米国外居住者は支払前にW-8BENまたはW-8BEN-Eが必要','https://help.raptive.com/hc/en-us/articles/360035935731-W-8-tax-form-for-international-creators-what-you-need-to-know')
+  '22'=@('世界各国。サイトとトラフィック条件を満たす必要あり','オンライン申請受付中','サイト追加後に所有権・品質・ポリシー確認あり','本人・支払プロフィールと、居住国に応じた税務情報が必要','https://www.ezoic.com/')
+  '23'=@('世界各国のサイトを個別審査。海外在住者も問い合わせ可能','申請・審査制','サイトごとのトラフィック・品質審査と技術導入あり','契約主体・支払情報、居住国に応じた税務情報を契約時確認','https://setupad.com/')
+  '24'=@('海外在住者を含め申請可能。英語圏トラフィック等の品質条件を重視','オンライン申請受付中','サイトごとの品質審査。公開収益・セッション条件あり','本人・事業・支払情報と、米国外居住者向け税務情報が必要となる場合あり','https://help.mediavine.com/what-does-it-take-to-get-approved-by-mediavine')
+  '25'=@('主に英語圏・プレミアム媒体向け。居住地より媒体条件を個別相談','問い合わせ・審査制','サイトごとの規模・品質・技術審査あり','契約主体・支払情報、居住国に応じた本人確認・税務情報を契約時確認','https://www.publift.com/')
+  '26'=@('日本中心。海外在住者は契約主体・居住国を問い合わせ','問い合わせ・審査制','媒体ごとの審査あり','契約者・請求・支払情報が必要。必要書類は契約時確認','https://www.microad.co.jp/contact/compass/')
+  '27'=@('日本語媒体中心。海外在住者の契約可否は問い合わせ','問い合わせ・審査制','媒体ごとの審査とタグ発行あり','契約主体・支払情報が必要。必要書類は契約時確認','https://lift.logly.co.jp/')
+  '28'=@('日本中心。海外在住者は契約主体・対象媒体を問い合わせ','問い合わせ・審査制','媒体ごとの規模・品質・技術審査あり','法人・契約・支払情報が中心。本人確認・税務書類は契約時確認','https://corp.fluct.jp/service/ssp/')
+  '29'=@('日本・海外媒体に対応。海外在住者は地域・契約主体を個別相談','問い合わせ・審査制','媒体ごとの審査と導入調整あり','契約主体・支払・税務情報を契約時に確認','https://geniee.co.jp/products/ssp/')
+  '30'=@('主に北米・英語圏の大規模媒体向け。海外在住者は個別申請','申請・審査制','サイトごとの規模・品質・技術審査あり','契約・支払情報と、居住国に応じた税務書類が必要となる場合あり','https://freestar.com/')
+}
+
+foreach ($row in $rows) {
+  $profile = $registrationProfiles[$row.id]
+  $row.user_registration_regions = $profile[0]
+  $row.new_user_registration_status = $profile[1]
+  $row.new_site_review_process = $profile[2]
+  $row.identity_tax_requirements = $profile[3]
+  $row.source_registration_url = $profile[4]
 }
 
 
@@ -152,6 +194,16 @@ foreach ($row in $rows) {
     $row.recommendation_rank_jp_beginner = [string]([int]$row.id - 2)
   } else {
     $row.recommendation_rank_jp_beginner = $row.id
+  }
+}
+
+# 公開文言では業界用語の Publisher を避け、一般利用者に伝わる表現へ統一する。
+foreach ($row in $rows) {
+  foreach ($property in $row.PSObject.Properties) {
+    $value = [string]$property.Value
+    if ($value -and $value -notmatch '^https?://') {
+      $property.Value = $value.Replace('Publisher', 'サイト運営者')
+    }
   }
 }
 
