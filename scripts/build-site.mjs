@@ -76,7 +76,7 @@ function tags(r) {
 }
 
 function card(r) {
-  const search = `${r.service_name} ${r.company} ${r.platform_type} ${r.japanese_site_fit} ${r.beginner_recommendation}`.toLowerCase();
+  const search = `${r.service_name} ${r.company} ${r.home_region} ${r.operator_country} ${r.publisher_content_languages} ${r.recommended_audience_geos} ${r.beginner_recommendation}`.toLowerCase();
   const payments = [
     [/^Yes/.test(r.paypal),'paypal'],[/^Yes/.test(r.payoneer),'payoneer'],[/Wise Yes|Revolut Yes|Revolutあり|Wise\/Revolut\/Paysera Yes/.test(r.wise_revolut),'wise-revolut'],[/^Yes/.test(r.crypto),'crypto'],[/Wire|SWIFT/i.test(r.bank_method),'wire'],[/Local [Bb]ank|国内銀行|日本国内銀行/.test(r.bank_method),'local-bank']
   ].filter(([matched])=>matched).map(([,key])=>key).join(' ');
@@ -84,7 +84,7 @@ function card(r) {
     [/Banner|バナー/i.test(r.ad_formats),'banner'],[/Native|ネイティブ|InText|In-text|レコメンド/i.test(`${r.platform_type} ${r.ad_formats}`),'native'],[/Video|動画/i.test(r.ad_formats),'video'],[/Pop|Push|Onclick/i.test(r.ad_formats),'pop-push'],[/Programmatic|Header|SSP|RTB/i.test(`${r.platform_type} ${r.header_bidding_or_programmatic}`),'programmatic']
   ].filter(([matched])=>matched).map(([,key])=>key).join(' ');
   const region = r.home_region.includes('日本') ? 'domestic' : 'overseas';
-  return `<article class="card" data-service-card data-search="${esc(search)}" data-score="${esc(r.zero_to_one_score_1_5)}" data-bank="${esc(r.japan_bank_only_complete)}" data-domain="${esc(r.custom_domain_requirement)}" data-payment="${esc(payments)}" data-format="${esc(formats)}" data-region="${region}"><div class="card-top"><span class="rank">初心者向け順位 ${String(r.recommendation_rank_jp_beginner).padStart(2,'0')}</span><span class="score" title="初収益までの始めやすさ。5点満点"><small>始めやすさ</small><strong>${esc(r.zero_to_one_score_1_5)}/5</strong></span></div><h3>${esc(r.service_name)}</h3><div class="card-type">${esc(r.platform_type)}</div>${tags(r)}<p class="card-copy">${esc(r.beginner_recommendation)}</p><a class="card-link" href="${href(`/services/${r.slug}/`)}">詳細を見る</a></article>`;
+  return `<article class="card" data-service-card data-search="${esc(search)}" data-score="${esc(r.zero_to_one_score_1_5)}" data-bank="${esc(r.japan_bank_only_complete)}" data-domain="${esc(r.custom_domain_requirement)}" data-payment="${esc(payments)}" data-format="${esc(formats)}" data-region="${region}"><div class="card-top"><span class="rank">初心者向け順位 ${String(r.recommendation_rank_jp_beginner).padStart(2,'0')}</span><span class="score" title="初収益までの始めやすさ。5点満点"><small>始めやすさ</small><strong>${esc(r.zero_to_one_score_1_5)}/5</strong></span></div><h3>${esc(r.service_name)}</h3><div class="country-label">${esc(r.home_region)}</div>${tags(r)}<p class="card-copy">${esc(r.beginner_recommendation)}</p><a class="card-link" href="${href(`/services/${r.slug}/`)}">詳細を見る</a></article>`;
 }
 
 function toolbar() {
@@ -102,10 +102,11 @@ function homePage() {
 }
 
 const labels = {
-  company:'運営会社',home_region:'主な地域',platform_type:'サービス種別',growth_stage:'想定ステージ',japanese_site_fit:'日本語サイト適合',japanese_site_fit_reason:'日本語適合の根拠',japanese_ui_support:'日本語UI・サポート',minimum_traffic:'最低トラフィック',minimum_site_age:'最低サイト年齢',review_required:'媒体審査',review_speed:'審査速度',custom_domain_requirement:'独自ドメイン',install_method:'導入方法',ads_txt:'ads.txt',bank_transfer:'銀行振込',japan_bank_only_complete:'日本の銀行だけで完結',bank_method:'銀行への支払方法',payout_processor:'支払プロセッサ',paypal:'PayPal',payoneer:'Payoneer',wise_revolut:'Wise / Revolut',stripe_payout:'Stripe',crypto:'暗号資産',minimum_payout_overall:'最低支払額',minimum_payout_bank:'銀行振込の最低額',payout_schedule:'支払周期',payout_currency:'支払通貨',payout_fee_note:'支払手数料',setup_fee:'初期費用',contract_exclusivity:'独占・契約',ad_models:'課金モデル',ad_formats:'広告形式',header_bidding_or_programmatic:'プログラマティック',adult_policy:'成人向け方針',AI_content_policy_note:'AIコンテンツ',adsense_good_standing_required:'AdSense良好状態',change_risk:'変更リスク',confidence:'調査確度',last_verified_date:'最終確認日'
+  company:'運営会社',home_region:'運営国',operator_country:'国',publisher_content_languages:'媒体の推奨言語',recommended_audience_geos:'収益化しやすい訪問者地域',language_revenue_note:'言語と収益の関係',platform_type:'サービス種別',growth_stage:'想定ステージ',japanese_site_fit:'日本語サイト適合',japanese_site_fit_reason:'日本語適合の根拠',japanese_ui_support:'日本語UI・サポート',minimum_traffic:'最低トラフィック',minimum_site_age:'最低サイト年齢',review_required:'媒体審査',review_speed:'審査速度',custom_domain_requirement:'独自ドメイン',install_method:'導入方法',ads_txt:'ads.txt',bank_transfer:'銀行振込',japan_bank_only_complete:'日本の銀行だけで完結',bank_method:'銀行への支払方法',payout_processor:'支払プロセッサ',paypal:'PayPal',payoneer:'Payoneer',wise_revolut:'Wise / Revolut',stripe_payout:'Stripe',crypto:'暗号資産',minimum_payout_overall:'最低支払額',minimum_payout_bank:'銀行振込の最低額',payout_schedule:'支払周期',payout_currency:'支払通貨',payout_fee_note:'支払手数料',setup_fee:'初期費用',contract_exclusivity:'独占・契約',ad_models:'課金モデル',ad_formats:'広告形式',header_bidding_or_programmatic:'プログラマティック',adult_policy:'成人向け方針',AI_content_policy_note:'AIコンテンツ',adsense_good_standing_required:'AdSense良好状態',change_risk:'変更リスク',confidence:'調査確度',last_verified_date:'最終確認日'
 };
 const sections = [
-  ['参加条件',['company','home_region','platform_type','growth_stage','japanese_site_fit','japanese_site_fit_reason','japanese_ui_support','minimum_traffic','minimum_site_age','review_required','review_speed']],
+  ['国・対応言語',['company','home_region','publisher_content_languages','recommended_audience_geos','language_revenue_note','japanese_ui_support']],
+  ['参加条件',['growth_stage','japanese_site_fit','japanese_site_fit_reason','minimum_traffic','minimum_site_age','review_required','review_speed']],
   ['サイト・導入条件',['custom_domain_requirement','install_method','ads_txt']],
   ['支払い',['bank_transfer','japan_bank_only_complete','bank_method','payout_processor','paypal','payoneer','wise_revolut','stripe_payout','crypto','minimum_payout_overall','minimum_payout_bank','payout_schedule','payout_currency','payout_fee_note']],
   ['広告と契約',['setup_fee','contract_exclusivity','ad_models','ad_formats','header_bidding_or_programmatic','adult_policy','AI_content_policy_note','adsense_good_standing_required']],
@@ -115,7 +116,7 @@ const sections = [
 function factList(r, fields) { return `<dl class="facts">${fields.map(k=>`<dt>${esc(labels[k])}</dt><dd>${esc(r[k] || '不明')}</dd>`).join('')}</dl>`; }
 function servicePage(r) {
   const outbound = r.affiliate_url || r.official_site_url;
-  const sources = [...new Set([r.source_primary_url,r.source_requirements_url,r.source_payment_url].filter(Boolean))];
+  const sources = [...new Set([r.source_primary_url,r.source_requirements_url,r.source_payment_url,r.source_language_geo_url].filter(Boolean))];
   const relatedCategories = categories.filter(category => category.filter(r));
   const title = `${r.service_name}の審査・最低PV・支払い条件｜広告DB`;
   const description = `${r.service_name}を日本語サイト初心者向けに調査。最低トラフィック、独自ドメイン、日本の銀行振込、最低支払額、広告形式を比較します。`;

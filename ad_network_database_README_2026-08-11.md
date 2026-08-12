@@ -10,9 +10,10 @@ Google AdSenseの審査に通らない、または審査で停滞した日本語
 - 国内アドネットワーク、国内SSP、海外セルフサーブ、Native、Managed Programmatic、Enterpriseを同一スキーマで比較
 
 ## データ品質
-- DB本体は30行×53列で、列順は `ad_network_schema_2026-08-11.tsv` と一致
+- DB本体は30行×58列で、列順は `ad_network_schema_2026-08-11.tsv` と一致
 - enum / enum-like列はスキーマの基本値に正規化し、条件の詳細は理由・方式・注記列に保持
 - 実収益例は1サービス対複数行になるため、別表 `ad_network_revenue_examples_2026-08-12.tsv` で管理
+- 運営国、媒体の推奨言語、収益化しやすい訪問者地域、言語・地域による収益差をDB本体で管理
 - 金額付き事例が見つからないサービスも `evidence_status=not_found` の調査記録を2件残し、未調査と区別
 - 空欄は「未調査」を意味しない。公開一次情報がない場合は `Unknown` / `不明` / `契約時確認` を明示
 

@@ -48,6 +48,8 @@ const homeSource = await readFile(join(root, 'index.html'), 'utf8');
 const homeServiceOrder = [...homeSource.matchAll(new RegExp(`href="${basePath}/services/([^/]+)/"`, 'g'))].map(match => match[1]);
 if (homeServiceOrder[0] !== 'imobile-ad-network') failures.push(`expected i-mobile first, got ${homeServiceOrder[0]}`);
 if (homeServiceOrder.indexOf('ninja-admax') !== 28) failures.push('expected Ninja AdMax at rank 29');
+if (!homeSource.includes('<div class="country-label">海外/キプロス</div>')) failures.push('Adsterra country label missing');
+if (homeSource.includes('<div class="card-type">海外アドネットワーク</div>') || homeSource.includes('<div class="card-type">Popunder広告</div>')) failures.push('legacy service type is still shown on cards');
 
 for (const file of servicePages) {
   const source = await readFile(file, 'utf8');

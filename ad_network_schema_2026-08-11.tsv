@@ -52,3 +52,8 @@ source_payment_url	url		支払条件の公式ソース
 notes	string		注意点・矛盾・更新時の再確認事項
 slug	string	lowercase-kebab-case	個別HTMLページの固定URL。公開後は原則変更しない
 affiliate_url	url		成果リンクを使用する場合の遷移先。空欄時はofficial_site_urlを使用
+operator_country	string	国名	運営会社の主な所在国
+publisher_content_languages	enum	日本語 / 日本語中心 / 英語中心 / 多言語	広告を掲載する媒体コンテンツの対応・推奨言語
+recommended_audience_geos	string		広告需要を踏まえた主な対象訪問者地域
+language_revenue_note	string		媒体言語・訪問者地域と収益の関係
+source_language_geo_url	url		言語・対象地域・国別収益判断の参照先

@@ -44,6 +44,8 @@ SITE_URL=https://example.github.io BASE_PATH=/repository-name npm run build
 
 個別ページの実収益欄は、別表 `ad_network_revenue_examples_2026-08-12.tsv` から生成します。金額、RPM、CPC、増加率を同じ「収益例」に混同せず、指標種別・期間・トラフィック条件・出典種別とともに表示します。
 
+一覧カードのサービス種別は表示せず、国内サービスは `日本`、海外サービスは `海外/国名` と表示します。媒体言語は `publisher_content_languages`、主な訪問者地域は `recommended_audience_geos`、言語・地域と収益の関係は `language_revenue_note` で管理します。
+
 ## 生成ページ
 
 - トップ・検索／絞り込み
