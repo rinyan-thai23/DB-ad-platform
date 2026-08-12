@@ -82,6 +82,8 @@ h1 { margin:0; font-size:clamp(42px,7vw,82px); }
 .card h3 { margin:24px 0 6px; font-size:24px; }
 .card-type { color:var(--muted); font-size:13px; }
 .country-label { display:inline-block; margin-top:2px; padding:5px 10px; border-radius:999px; background:#e7ede4; color:var(--green-dark); font-size:13px; font-weight:900; }
+.country-flag { margin-right:6px; font-size:18px; line-height:1; vertical-align:-2px; }
+.tag.paypal { background:#e8f2ff; color:#123d80; border-color:#c7dcfa; }
 .tags { display:flex; flex-wrap:wrap; gap:7px; margin:18px 0; }
 .tag { padding:5px 9px; border-radius:99px; background:#ecebe4; font-size:12px; font-weight:800; }
 .tag.good { background:#d9efe4; color:var(--green-dark); }

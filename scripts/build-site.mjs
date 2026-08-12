@@ -34,7 +34,7 @@ const categories = [
   { group:'サイト条件', slug:'custom-domain-required', title:'独自ドメイン必須', short:'独自ドメインでの運営が前提', description:'公開要件や対象サービスの性質から、独自ドメインが必須と判断した広告サービス。', filter:r=>r.custom_domain_requirement==='必須' },
   { group:'サイト条件', slug:'no-custom-domain', title:'独自ドメイン必須ではない', short:'独自ドメインなしでも申請候補', description:'独自ドメインがなくても利用経路や例外が確認できる広告サービス。媒体審査の通過を保証するものではありません。', filter:r=>r.custom_domain_requirement==='必須ではない' },
   { group:'サイト条件', slug:'custom-domain-unknown', title:'独自ドメインは要確認', short:'申請前に公式・担当者へ確認', description:'公開情報だけでは独自ドメインの必要性を断定できない広告サービス。申請前に公式情報や担当者へ確認してください。', filter:r=>r.custom_domain_requirement==='要確認' },
-  { group:'支払い方法', slug:'japan-bank', title:'日本の銀行だけで完結', short:'外部ウォレットを経由しない', description:'日本の銀行口座への支払いを公式情報で確認できたサービス。', filter:r=>r.japan_bank_only_complete==='Yes' },
+  { group:'支払い方法', slug:'japan-bank', title:'日本の銀行への振込', short:'日本の銀行口座で受け取れる', description:'日本の銀行口座への支払いを公式情報で確認できたサービス。', filter:r=>r.japan_bank_only_complete==='Yes' },
   { group:'支払い方法', slug:'paypal', title:'PayPal対応', short:'PayPalで広告収益を受取', description:'媒体運営者への支払い方法としてPayPal対応を確認できた広告サービス。地域やアカウント条件を確認してください。', filter:r=>/^Yes/.test(r.paypal) },
   { group:'支払い方法', slug:'payoneer', title:'Payoneer対応', short:'国境を越えた受取手段', description:'媒体運営者への支払い方法としてPayoneer対応を確認できた広告サービス。', filter:r=>/^Yes/.test(r.payoneer) },
   { group:'支払い方法', slug:'wise-revolut', title:'Wise・Revolut対応', short:'海外送金サービスを利用', description:'Wise、Revolut、Payseraの対応を明示的に確認できた広告サービス。', filter:r=>/Wise Yes|Revolut Yes|Revolutあり|Wise\/Revolut\/Paysera Yes/.test(r.wise_revolut) },
@@ -72,7 +72,14 @@ ${schema ? `<script type="application/ld+json">${schema}</script>` : ''}
 function tags(r) {
   const bankLabel = r.japan_bank_only_complete === 'Yes' ? '対応' : r.japan_bank_only_complete === 'Conditional' ? '条件付き' : r.japan_bank_only_complete === 'No' ? '非対応' : '不明';
   const domainLabel = `独自ドメイン: ${r.custom_domain_requirement}`;
-  return `<div class="tags"><span class="tag ${r.japan_bank_only_complete==='Yes'?'good':'warn'}">日本の銀行のみ: ${bankLabel}</span><span class="tag">${domainLabel}</span><span class="tag">初心者適性: ${esc(r.beginner_tier)}</span><span class="tag">広告の強さ: ${esc(r.UX_intrusiveness_1_5)}/5</span></div>`;
+  const paypalTag = /^Yes/.test(r.paypal) ? '<span class="tag paypal">PayPal対応</span>' : '';
+  return `<div class="tags"><span class="tag ${r.japan_bank_only_complete==='Yes'?'good':'warn'}">日本の銀行への振込: ${bankLabel}</span>${paypalTag}<span class="tag">${domainLabel}</span><span class="tag">初心者適性: ${esc(r.beginner_tier)}</span><span class="tag">広告の強さ: ${esc(r.UX_intrusiveness_1_5)}/5</span></div>`;
+}
+
+const countryFlags = { 日本:'🇯🇵', アメリカ:'🇺🇸', キプロス:'🇨🇾', イスラエル:'🇮🇱', エストニア:'🇪🇪', イギリス:'🇬🇧', コスタリカ:'🇨🇷', チェコ:'🇨🇿', スペイン:'🇪🇸', ラトビア:'🇱🇻', オーストラリア:'🇦🇺' };
+function countryLabel(r) {
+  const flag = countryFlags[r.operator_country] || '🌐';
+  return `<div class="country-label"><span class="country-flag" aria-hidden="true">${flag}</span>${esc(r.home_region)}</div>`;
 }
 
 function card(r) {
@@ -84,7 +91,7 @@ function card(r) {
     [/Banner|バナー/i.test(r.ad_formats),'banner'],[/Native|ネイティブ|InText|In-text|レコメンド/i.test(`${r.platform_type} ${r.ad_formats}`),'native'],[/Video|動画/i.test(r.ad_formats),'video'],[/Pop|Push|Onclick/i.test(r.ad_formats),'pop-push'],[/Programmatic|Header|SSP|RTB/i.test(`${r.platform_type} ${r.header_bidding_or_programmatic}`),'programmatic']
   ].filter(([matched])=>matched).map(([,key])=>key).join(' ');
   const region = r.home_region.includes('日本') ? 'domestic' : 'overseas';
-  return `<article class="card" data-service-card data-search="${esc(search)}" data-score="${esc(r.zero_to_one_score_1_5)}" data-bank="${esc(r.japan_bank_only_complete)}" data-domain="${esc(r.custom_domain_requirement)}" data-payment="${esc(payments)}" data-format="${esc(formats)}" data-region="${region}"><div class="card-top"><span class="rank">初心者向け順位 ${String(r.recommendation_rank_jp_beginner).padStart(2,'0')}</span><span class="score" title="初収益までの始めやすさ。5点満点"><small>始めやすさ</small><strong>${esc(r.zero_to_one_score_1_5)}/5</strong></span></div><h3>${esc(r.service_name)}</h3><div class="country-label">${esc(r.home_region)}</div>${tags(r)}<p class="card-copy">${esc(r.beginner_recommendation)}</p><a class="card-link" href="${href(`/services/${r.slug}/`)}">詳細を見る</a></article>`;
+  return `<article class="card" data-service-card data-search="${esc(search)}" data-score="${esc(r.zero_to_one_score_1_5)}" data-bank="${esc(r.japan_bank_only_complete)}" data-domain="${esc(r.custom_domain_requirement)}" data-payment="${esc(payments)}" data-format="${esc(formats)}" data-region="${region}"><div class="card-top"><span class="rank">初心者向け順位 ${String(r.recommendation_rank_jp_beginner).padStart(2,'0')}</span><span class="score" title="初収益までの始めやすさ。5点満点"><small>始めやすさ</small><strong>${esc(r.zero_to_one_score_1_5)}/5</strong></span></div><h3>${esc(r.service_name)}</h3>${countryLabel(r)}${tags(r)}<p class="card-copy">${esc(r.beginner_recommendation)}</p><a class="card-link" href="${href(`/services/${r.slug}/`)}">詳細を見る</a></article>`;
 }
 
 function toolbar() {
@@ -154,7 +161,14 @@ function infoPage(kind) {
   return layout({title:`${title}｜広告DB`,description:guide?'日本語サイト初心者が広告サービスを選ぶときの審査、出金、読みやすさの確認ポイント。':'広告プラットフォームDBの調査方法、評価基準、更新方針。',path:`/${kind}/`,body});
 }
 
-async function save(path, content) { const target=join(dist,path); await mkdir(join(target,'..'),{recursive:true}); await writeFile(target,content,'utf8'); }
+async function save(path, content) {
+  const target=join(dist,path);
+  const normalizedContent = content
+    .replaceAll('日本の銀行のみ:', '日本の銀行への振込:')
+    .replaceAll('日本の銀行だけで完結', '日本の銀行への振込');
+  await mkdir(join(target,'..'),{recursive:true});
+  await writeFile(target,normalizedContent,'utf8');
+}
 
 await rm(dist,{recursive:true,force:true});
 await mkdir(join(dist,'assets'),{recursive:true});
