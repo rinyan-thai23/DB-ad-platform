@@ -1,0 +1,10 @@
+column	description
+service_id	ad_network_databaseのidと結合するサービスID
+sentiment	positive、mixed、negativeの3値。サイト側で日本語表示する
+source_kind	個人ブログ、口コミサイト、Reddit投稿など情報源の種類
+source_date	記事・投稿の日付。取得できない場合は公開日不明、集約ページは確認日
+source_title	調査項目の短い見出し
+summary	原文を長く引用せず日本語で要約した利用体験・評価
+context	サイト言語、媒体種別、利用期間など比較に必要な背景
+caveat	利害関係、標本数、古さ、検証不能な点などの注意
+source_url	元記事・投稿へ直接移動するURL

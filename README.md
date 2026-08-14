@@ -55,6 +55,8 @@ Cloudflareのプロジェクト名が `db-ad-platform` 以外の場合は、環�
 
 個別ページの実収益欄は、別表 `ad_network_revenue_examples_2026-08-12.tsv` から生成します。金額、RPM、CPC、増加率を同じ「収益例」に混同せず、指標種別・期間・トラフィック条件・出典種別とともに表示します。
 
+上位サービスの詳細口コミページは `ad_network_review_research_2026-08-14.tsv` から生成します。口コミは原文を長く転載せず日本語で要約し、肯定・賛否混在・否定の分類、媒体条件、情報源の古さや利害関係を併記します。件数をサービスの評価点や利用者全体の支持率として扱いません。
+
 一覧カードのサービス種別は表示せず、国内サービスは `日本`、海外サービスは `海外/国名` と表示します。媒体言語は `publisher_content_languages`、主な訪問者地域は `recommended_audience_geos`、言語・地域と収益の関係は `language_revenue_note` で管理します。
 
 ## 生成ページ
@@ -80,6 +82,8 @@ Cloudflareのプロジェクト名が `db-ad-platform` 以外の場合は、環�
 - `ad_network_schema_2026-08-11.tsv`: 公開スキーマ
 - `ad_network_revenue_examples_2026-08-12.tsv`: サービス別の実収益・RPM・CPC・増加率と調査記録
 - `ad_network_revenue_examples_schema_2026-08-12.tsv`: 実収益例テーブルのスキーマ
+- `ad_network_review_research_2026-08-14.tsv`: 上位サービスの口コミ・体験談調査
+- `ad_network_review_research_schema_2026-08-14.tsv`: 口コミ調査テーブルのスキーマ
 
 アフィリエイトURL、調査ソース、生成ロジックは公開Repositoryにそのまま含める方針です。AIエージェントも本READMEの構成・更新手順に従ってください。
 

@@ -6,6 +6,7 @@ const root = process.cwd();
 const dist = join(root, 'docs');
 const dataFile = join(root, 'ad_network_database_2026-08-11.tsv');
 const revenueFile = join(root, 'ad_network_revenue_examples_2026-08-12.tsv');
+const reviewFile = join(root, 'ad_network_review_research_2026-08-14.tsv');
 const siteUrl = (process.env.SITE_URL || 'https://db-ad-platform.pages.dev').replace(/\/$/, '');
 const basePath = (process.env.BASE_PATH ?? '').replace(/\/$/, '');
 const generatedAt = '2026-08-12';
@@ -16,6 +17,7 @@ const href = path => `${basePath}${path}` || '/';
 const canonical = path => `${siteUrl}${basePath}${path}`;
 const rows = parseTsv(await readFile(dataFile, 'utf8')).sort((a,b) => Number(a.recommendation_rank_jp_beginner)-Number(b.recommendation_rank_jp_beginner));
 const revenueExamples = parseTsv(await readFile(revenueFile, 'utf8'));
+const reviewResearch = parseTsv(await readFile(reviewFile, 'utf8'));
 
 function parseTsv(text) {
   const lines = text.replace(/^\uFEFF/, '').trimEnd().split(/\r?\n/);
@@ -136,11 +138,34 @@ function servicePage(r) {
   const bankDisplay = r.japan_bank_only_complete === 'Yes' ? '対応' : r.japan_bank_only_complete === 'Conditional' ? '条件付き' : r.japan_bank_only_complete === 'No' ? '非対応' : '不明';
   const domainNote = r.custom_domain_requirement === '必須' ? 'このサービスでは独自ドメインが必要です。' : r.custom_domain_requirement === '必須ではない' ? '独自ドメインがなくても申請候補になります。媒体審査の通過は保証されません。' : '公開情報だけでは断定できません。申請前に公式情報または担当者へ確認してください。';
   const serviceRevenue = revenueExamples.filter(example => example.service_id === r.id && example.evidence_status === 'confirmed');
-  const revenuePanel = `<div class="panel revenue-panel" data-revenue-examples><div class="panel-heading"><div><p class="eyebrow">公開された実測・事例</p><h2>実際の収益例</h2></div><strong>${serviceRevenue.length}件</strong></div><p class="revenue-disclaimer">他サイトの結果であり、同額の収益を保証するものではありません。運営会社掲載の事例は販促目的を含むため、第三者投稿と区別しています。</p>${serviceRevenue.length ? `<div class="revenue-list">${serviceRevenue.map(example=>`<article class="revenue-example"><div class="revenue-meta"><span>${esc(example.source_type)}</span><span>${esc(example.metric_type)}</span></div><h3>${esc(example.result_summary)}</h3><dl><dt>期間・母数</dt><dd>${esc(example.period_traffic || '詳細非公開')}</dd><dt>媒体・地域</dt><dd>${esc(example.publisher_context || '詳細非公開')}</dd></dl><a href="${esc(example.source_url)}" rel="nofollow noopener" target="_blank">出典を確認</a>${example.caveat ? `<p>${esc(example.caveat)}</p>` : ''}</article>`).join('')}</div>` : '<p class="empty-revenue">金額・RPM・CPC・増加率を確認できる公開事例は見つかっていません。</p>'}</div>`;
+  const serviceReviews = reviewResearch.filter(review => review.service_id === r.id);
+  const reviewCallout = serviceReviews.length ? `<div class="panel review-callout"><div><p class="eyebrow">利用者の公開記録を再調査</p><h2>詳細口コミ調査まとめ</h2><p>${serviceReviews.length}件のブログ・口コミ・コミュニティ投稿を日本語で要約し、情報源の偏りや古さも併記しています。</p></div><a class="cta" href="${href(`/services/${r.slug}/reviews/`)}">口コミ調査を詳しく見る</a></div>` : '';
+  const revenuePanel = reviewCallout + `<div class="panel revenue-panel" data-revenue-examples><div class="panel-heading"><div><p class="eyebrow">公開された実測・事例</p><h2>実際の収益例</h2></div><strong>${serviceRevenue.length}件</strong></div><p class="revenue-disclaimer">他サイトの結果であり、同額の収益を保証するものではありません。運営会社掲載の事例は販促目的を含むため、第三者投稿と区別しています。</p>${serviceRevenue.length ? `<div class="revenue-list">${serviceRevenue.map(example=>`<article class="revenue-example"><div class="revenue-meta"><span>${esc(example.source_type)}</span><span>${esc(example.metric_type)}</span></div><h3>${esc(example.result_summary)}</h3><dl><dt>期間・母数</dt><dd>${esc(example.period_traffic || '詳細非公開')}</dd><dt>媒体・地域</dt><dd>${esc(example.publisher_context || '詳細非公開')}</dd></dl><a href="${esc(example.source_url)}" rel="nofollow noopener" target="_blank">出典を確認</a>${example.caveat ? `<p>${esc(example.caveat)}</p>` : ''}</article>`).join('')}</div>` : '<p class="empty-revenue">金額・RPM・CPC・増加率を確認できる公開事例は見つかっていません。</p>'}</div>`;
   const adsenseWarning = (r.id === '6' ? `<div class="panel warning-panel"><p class="eyebrow">本DBでの位置づけ</p><h2>AdSenseは代替候補ではありません</h2><p>このDBは、AdSenseの審査に通らず次の収益化方法を探している人を主な対象にしています。AdSenseは比較基準として残していますが、初心者向け順位は最下位です。不承認理由はコンテンツ量・品質・ナビゲーション・トラフィックなど複数にわたり、修正箇所を絞り込みにくい場合があります。</p><a class="text-link" href="${href('/categories/adsense-alternatives/')}">AdSense以外の候補を見る</a></div>` : '') + revenuePanel;
   const body = `<div class="wrap breadcrumb"><a href="${href('/')}">トップ</a> / <a href="${href('/#database')}">広告サービス</a> / ${esc(r.service_name)}</div><section class="detail-hero"><div class="wrap"><div class="detail-title"><div><p class="eyebrow">${esc(r.platform_type)}</p><h1>${esc(r.service_name)}</h1><p class="lead">${esc(r.beginner_recommendation)}</p></div><div class="rank-box"><span>初心者向け順位</span><b>${esc(r.recommendation_rank_jp_beginner)}</b><small>30サービス中</small></div></div><div class="summary-grid"><div class="summary-cell"><span>初収益までの始めやすさ</span><b>${esc(r.zero_to_one_score_1_5)} / 5点</b></div><div class="summary-cell"><span>日本語サイト</span><b>${esc(r.japanese_site_fit)}</b></div><div class="summary-cell"><span>最低トラフィック</span><b>${esc(r.minimum_traffic)}</b></div><div class="summary-cell"><span>日本の銀行だけで完結</span><b>${bankDisplay}</b></div></div></div></section>
   <section class="section"><div class="wrap detail-layout"><div>${adsenseWarning}<div class="panel genre-panel" data-related-genres><div class="panel-heading"><div><p class="eyebrow">該当ジャンル・${relatedCategories.length}件</p><h2>このサービスが属するジャンル</h2></div><a class="text-link" href="${href('/categories/')}">全ジャンルを見る</a></div><div class="genre-list">${relatedCategories.map(category=>`<a class="genre-chip" href="${href(`/categories/${category.slug}/`)}"><small>${esc(category.group)}</small><strong>${esc(category.title)}</strong></a>`).join('')}</div></div><div class="panel"><h2>独自ドメイン</h2><div class="domain-verdict"><span>サイト条件</span><strong>${esc(r.custom_domain_requirement)}</strong><p>${domainNote}</p></div></div>${sections.map(([name,fields])=>`<div class="panel"><h2>${name}</h2>${factList(r,fields)}</div>`).join('')}<div class="panel"><h2>一次情報・参照先</h2>${sources.length?`<ul class="sources">${sources.map(u=>`<li><a href="${esc(u)}" rel="nofollow noopener" target="_blank">${esc(u)}</a></li>`).join('')}</ul>`:'<p>公開一次情報のURLは確認できていません。</p>'}${r.notes?`<p class="notice">${esc(r.notes)}</p>`:''}</div></div><aside class="sticky"><div class="panel"><p class="eyebrow">公式サイト</p><h2>${esc(r.service_name)}を確認</h2><p>申込前に最新条件を公式サイトまたは管理画面で再確認してください。</p><a class="cta" href="${esc(outbound)}" rel="sponsored nofollow noopener" target="_blank">公式サイトへ進む</a><p class="disclosure">affiliate_urlが設定されている場合は、成果報酬リンクへ自動的に切り替わります。</p></div></aside></div></section>`;
   return layout({title,description,path:`/services/${r.slug}/`,body,schema});
+}
+
+const reviewVerdicts = {
+  '2':'申請しやすさを評価する記録はありますが、収益面ではクリック単価の低さと広告の偏りが繰り返し指摘されています。主力収益源と決め打ちせず、1枠でRPMと表示速度を測るのが現実的です。',
+  '3':'審査の早さを評価する声がある一方、単価の公開例は低いものから平均15円前後まで差があります。古い少数事例しかないため、現在の在庫と自分のジャンルで短期間テストする前提の候補です。',
+  '4':'地域・端末・形式によって高いCPMが出た報告がある一方、極端に低い収益、意図しない広告表示、支払い・停止への不満も確認できます。訪問者の国別テストと広告品質の監視を行える人向けです。',
+  '5':'審査の通りやすさや設定画面を評価する記録はありますが、公開実測では単価が低く、出金まで時間がかかるという見方が中心です。主力より補助枠として比較するのが妥当です。',
+  '7':'高いCPMや小規模サイト対応を評価する投稿と、計測・広告品質・支払い遅延への強い不満が併存します。宣伝的な投稿も目立つため、少額到達後の支払い確認と地域別の広告確認を終えるまで限定運用が安全です。'
+};
+
+function reviewPage(r) {
+  const reviews = reviewResearch.filter(review => review.service_id === r.id);
+  const pagePath = `/services/${r.slug}/reviews/`;
+  const title = `${r.service_name}の詳細口コミ調査まとめ`;
+  const description = `${r.service_name}の利用者ブログ、口コミサイト、コミュニティ投稿を日本語で要約。収益、審査、広告品質、支払いに関する評価と情報源の注意点を整理します。`;
+  const sentimentLabels = {positive:'肯定的',mixed:'評価が分かれる',negative:'否定的'};
+  const counts = Object.fromEntries(['positive','mixed','negative'].map(key => [key,reviews.filter(review => review.sentiment === key).length]));
+  const findings = reviews.map(review => `<article class="review-finding review-${esc(review.sentiment)}"><div class="review-meta"><span>${esc(sentimentLabels[review.sentiment] || review.sentiment)}</span><span>${esc(review.source_kind)}</span><time>${esc(review.source_date)}</time></div><h2>${esc(review.source_title)}</h2><p>${esc(review.summary)}</p><dl><dt>確認できる背景</dt><dd>${esc(review.context)}</dd><dt>読み方の注意</dt><dd>${esc(review.caveat)}</dd></dl><a class="text-link" href="${esc(review.source_url)}" rel="nofollow noopener" target="_blank">元の投稿・記事を確認する →</a></article>`).join('');
+  const schema = JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'Article',headline:title,description,datePublished:'2026-08-14',dateModified:'2026-08-14',mainEntityOfPage:canonical(pagePath),about:{'@type':'SoftwareApplication',name:r.service_name,url:canonical(`/services/${r.slug}/`)},author:{'@type':'Organization',name:'広告DB 日本版'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'トップ',item:canonical('/')},{'@type':'ListItem',position:2,name:r.service_name,item:canonical(`/services/${r.slug}/`)},{'@type':'ListItem',position:3,name:'詳細口コミ調査まとめ',item:canonical(pagePath)}]}]});
+  const body = `<div class="wrap breadcrumb"><a href="${href('/')}">トップ</a> / <a href="${href(`/services/${r.slug}/`)}">${esc(r.service_name)}</a> / 詳細口コミ調査まとめ</div><article class="review-page"><header class="page-intro"><div class="wrap prose"><p class="eyebrow">利用者の公開記録・${reviews.length}件を確認</p><h1>${title}</h1><p class="lead">口コミを星の数だけで判断せず、何を使い、どの条件で、何に満足・不満だったのかを日本語で整理しました。原文の長い転載はせず、確認できた内容を要約しています。</p><div class="article-meta">調査・更新: 2026年8月14日</div></div></header><div class="wrap review-layout"><main><section class="review-verdict"><p class="eyebrow">今回の調査所見</p><h2>口コミから分かること</h2><p>${esc(reviewVerdicts[r.id])}</p><div class="review-counts"><span class="positive">肯定的 <b>${counts.positive}</b></span><span class="mixed">評価が分かれる <b>${counts.mixed}</b></span><span class="negative">否定的 <b>${counts.negative}</b></span></div><p class="review-count-note">件数は評価点ではなく、このページで採用した公開情報の分類です。</p></section><section class="review-method"><h2>先に知っておきたい調査上の限界</h2><ul><li>投稿者本人、トラフィック品質、管理画面の全履歴は当サイトでは検証できません。</li><li>紹介リンク付き記事、運営会社事例、匿名投稿は利害関係や選択バイアスを伴います。</li><li>広告収益は国、言語、端末、広告形式、季節、無効トラフィック判定で大きく変わります。</li><li>古い国内ブログは当時の体験として残し、現在も同じ条件だとは扱いません。</li></ul></section><section class="review-findings"><div class="section-head"><div><p class="eyebrow">出典別に確認</p><h2>口コミ・体験談の要約</h2></div></div>${findings}</section></main><aside class="article-aside"><div class="panel sticky"><p class="eyebrow">DBの比較情報へ戻る</p><h2>${esc(r.service_name)}</h2><p>審査、最低PV、独自ドメイン、支払い方法、実際の収益例は個別ページで確認できます。</p><a class="cta" href="${href(`/services/${r.slug}/`)}">サービス詳細を見る</a><a class="text-link aside-link" href="${href('/#database')}">全サービスを比較</a></div></aside></div></article>`;
+  return layout({title:`${title}｜広告DB`,description,path:pagePath,body,schema});
 }
 
 function categoryPage(c) {
@@ -210,6 +235,7 @@ await cp(join(root,'src','styles.css'),join(dist,'assets','styles.css'));
 await cp(join(root,'src','app.js'),join(dist,'assets','app.js'));
 await save('index.html',homePage());
 for (const r of rows) await save(join('services',r.slug,'index.html'),servicePage(r));
+for (const r of rows.filter(row => reviewResearch.some(review => review.service_id === row.id))) await save(join('services',r.slug,'reviews','index.html'),reviewPage(r));
 await save(join('categories','index.html'),categoriesPage());
 for (const c of categories) await save(join('categories',c.slug,'index.html'),categoryPage(c));
 await save(join('guide','index.html'),infoPage('guide'));
@@ -217,7 +243,7 @@ await save(join('about','index.html'),infoPage('about'));
 await save(join('articles','cloudflare-pages-monetization','index.html'),cloudflareMonetizationArticle());
 await save('404.html',layout({title:'ページが見つかりません｜広告DB',description:'ページが見つかりません。',robots:'noindex,nofollow',body:`<section class="page-intro"><div class="wrap"><h1>404</h1><p class="lead">ページが見つかりません。<a href="${href('/')}">トップへ戻る</a></p></div></section>`}));
 
-const paths = ['/',...rows.map(r=>`/services/${r.slug}/`),'/categories/',...categories.map(c=>`/categories/${c.slug}/`),'/guide/','/about/','/articles/cloudflare-pages-monetization/'];
+const paths = ['/',...rows.map(r=>`/services/${r.slug}/`),...rows.filter(row => reviewResearch.some(review => review.service_id === row.id)).map(r=>`/services/${r.slug}/reviews/`),'/categories/',...categories.map(c=>`/categories/${c.slug}/`),'/guide/','/about/','/articles/cloudflare-pages-monetization/'];
 await save('sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(p=>`<url><loc>${esc(canonical(p))}</loc><lastmod>${generatedAt}</lastmod></url>`).join('')}</urlset>`);
 await save('robots.txt',`User-agent: *\nAllow: /\nSitemap: ${canonical('/sitemap.xml')}\n`);
 await save('.nojekyll','');
