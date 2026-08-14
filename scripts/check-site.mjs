@@ -41,10 +41,12 @@ const relativeHtml = file => relative(root, file).replaceAll('\\', '/');
 const servicePages = html.filter(file => /^services\/[^/]+\/index\.html$/.test(relativeHtml(file)));
 const categoryPages = html.filter(file => /^categories\/[^/]+\/index\.html$/.test(relativeHtml(file)));
 const reviewPages = html.filter(file => /^services\/[^/]+\/reviews\/index\.html$/.test(relativeHtml(file)));
+const stylesheetSource = await readFile(join(root, 'assets', 'styles.css'), 'utf8');
 
 if (servicePages.length !== 30) failures.push(`expected 30 service pages, got ${servicePages.length}`);
 if (categoryPages.length < 1) failures.push('no category pages generated');
 if (reviewPages.length !== 5) failures.push(`expected 5 detailed review pages, got ${reviewPages.length}`);
+if (!stylesheetSource.includes('.review-layout') || !stylesheetSource.includes('.review-finding')) failures.push('detailed review CSS missing from generated stylesheet');
 const articleFile = join(root, 'articles', 'cloudflare-pages-monetization', 'index.html');
 if (!html.includes(articleFile)) failures.push('Cloudflare Pages monetization article missing');
 
@@ -69,6 +71,7 @@ for (const file of servicePages) {
 
 for (const file of reviewPages) {
   const source = await readFile(file, 'utf8');
+  if (!new RegExp(`href="${basePath}/assets/styles\\.css\\?v=[a-f0-9]+"`).test(source)) failures.push(`${file}: versioned stylesheet link missing`);
   if (!source.includes('詳細口コミ調査まとめ')) failures.push(`${file}: detailed review heading missing`);
   if (!source.includes('読み方の注意')) failures.push(`${file}: source caveat missing`);
   const serviceDir = relativeHtml(file).split('/')[1];
