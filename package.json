@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.mjs",
+    "build:github": "node scripts/build-github-pages.mjs",
     "serve": "node scripts/serve.mjs",
     "check": "node scripts/check-site.mjs"
   }

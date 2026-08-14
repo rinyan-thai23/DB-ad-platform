@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://db-ad-platform.pages.dev/sitemap.xml
+Sitemap: https://rinyan-thai23.github.io/DB-ad-platform/sitemap.xml

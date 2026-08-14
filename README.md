@@ -14,6 +14,14 @@ npm run serve
 
 `http://localhost:4173/` で確認できます。生成物はCloudflare Pages公開用の `docs/` です。標準の公開先はRepository名を使った `https://db-ad-platform.pages.dev/` とし、ルートパス `/` で動作します。
 
+GitHub Pagesの `main /docs` で検証するためにコミットするHTMLを再生成するときは、Repository名を含む専用コマンドを使います。
+
+```bash
+npm run build:github
+```
+
+このコマンドはリンクとCSSを `/DB-ad-platform/` 配下へ向け、`https://rinyan-thai23.github.io/DB-ad-platform/` 用のcanonical URLも生成します。Cloudflare Pagesでは従来どおりBuild commandを `npm run build` とし、ルートパス用HTMLをデプロイ時に生成します。
+
 本番ビルドでは公開URLを指定してください。
 
 ```bash
